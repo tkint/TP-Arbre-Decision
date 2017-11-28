@@ -334,4 +334,30 @@ public class Node {
 
         return stringValue;
     }
+
+    public void print() {
+        print("#", true, "");
+    }
+
+    private void print(String prefix, boolean isTail, String branchValue) {
+        boolean ouiNon = value.toLowerCase().equals("oui") || value.toLowerCase().equals("non");
+        String txt = prefix;
+        txt += branchValue != "" ? isTail ? "└── " : "├── " : " ── ";
+        txt += branchValue != "" ? BLUE + branchValue + RESET + " => " : BLUE;
+        txt += ouiNon ? GREEN : RED;
+        txt += value.toUpperCase() + RESET;
+        System.out.println(txt);
+        txt = prefix;
+        txt += isTail ? "     " : "│    ";
+        for (int i = 0; i < children.size() - 1; i++) {
+            branchValue = getStringValue(Integer.valueOf(children.get(i).getValue()), getValue());
+            branchValue += " (" + children.get(i).getValue() + ")";
+            children.get(i).getChild().print(txt, false, branchValue.toUpperCase());
+        }
+        if (children.size() > 0) {
+            branchValue = getStringValue(Integer.valueOf(children.get(children.size() - 1).getValue()), getValue());
+            branchValue += " (" + children.get(children.size() - 1).getValue() + ")";
+            children.get(children.size() - 1).getChild().print(txt, true, branchValue.toUpperCase());
+        }
+    }
 }

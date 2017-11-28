@@ -45,7 +45,8 @@ public class Main {
 //        System.out.println("--------------------------------------------");
 
         Node tree = root.generateTree();
-        tree.display();
+//        tree.display();
+        tree.print();
     }
 
     public static void afficheRatio(Node node, String att) {
