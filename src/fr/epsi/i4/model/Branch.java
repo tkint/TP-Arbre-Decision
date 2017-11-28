@@ -4,6 +4,7 @@ package fr.epsi.i4.model;
  * Created by tkint on 23/11/2017.
  */
 public class Branch {
+
     private String value;
     private Node child;
 

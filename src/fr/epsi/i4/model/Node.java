@@ -240,7 +240,7 @@ public class Node {
         if (plusPertinent != null) {
             setValue(plusPertinent);
             for (Integer value : getUniqueValues(plusPertinent)) {
-                Branch branch = addChild(new Branch(Integer.toString(value)));
+                Branch branch = addChild(new Branch(String.valueOf(value)));
                 Node child = branch.setChild(new Node(value, plusPertinent, data));
                 child.generateTree();
             }
@@ -252,13 +252,13 @@ public class Node {
 
     public void display() {
         if (getValue() != null && children.size() > 0) {
-            System.out.print(getValue());
+            System.out.print(" - " + getValue().toUpperCase() + " - ");
             System.out.println("");
             System.out.print("| ");
             for (Branch child : children) {
-                System.out.print(child.getValue());
+                System.out.print(getStringValue(Integer.valueOf(child.getValue()), getValue()));
                 if (child.getChild().getValue() != null) {
-                    System.out.print(" - " + child.getChild().getValue());
+                    System.out.print(" -> " + child.getChild().getValue().toUpperCase());
                 }
                 System.out.print(" | ");
             }
@@ -267,5 +267,60 @@ public class Node {
                 child.getChild().display();
             }
         }
+    }
+
+    public String getStringValue(Integer value, String att) {
+        String stringValue = null;
+
+        switch (att) {
+            case "ciel":
+                switch (value) {
+                    case 0:
+                        stringValue = "SOLEIL";
+                        break;
+                    case 1:
+                        stringValue = "COUVERT";
+                        break;
+                    case 2:
+                        stringValue = "PLUIE";
+                        break;
+                }
+                break;
+            case "temperature":
+                switch (value) {
+                    case 0:
+                        stringValue = "CHAUD";
+                        break;
+                    case 1:
+                        stringValue = "DOUX";
+                        break;
+                    case 2:
+                        stringValue = "FROID";
+                        break;
+                }
+                break;
+            case "humidite":
+                switch (value) {
+                    case 0:
+                        stringValue = "ELEVEE";
+                        break;
+                    case 1:
+                        stringValue = "NORMALE";
+                        break;
+                }
+                break;
+            case "vent":
+                switch (value) {
+                    case 0:
+                        stringValue = "FAIBLE";
+                        break;
+                    case 1:
+                        stringValue = "FORT";
+                        break;
+                }
+                break;
+        }
+
+        return stringValue;
     }
 }
