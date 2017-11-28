@@ -42,7 +42,6 @@ public class Tree {
         return entry;
     }
 
-
     public double entropie(int value, String att) {
         double pOui = 0;
         double pNon = 0;
@@ -63,6 +62,31 @@ public class Tree {
             System.out.println(e);
         }
 
+        if (pOui == 0 || pNon == 0) {
+            return 0d;
+        }
+
+        pOui /= data.size();
+        pNon /= data.size();
+
+        return -pOui * log2(pOui) - pNon * log2(pNon);
+    }
+
+    public double entropie() {
+        double pOui = 0;
+        double pNon = 0;
+
+        for (Entry entry : data) {
+            if (entry.getJouer() == 0) {
+                pNon++;
+            } else {
+                pOui++;
+            }
+        }
+        if (pOui == 0 || pNon == 0) {
+            return 0d;
+        }
+
         pOui /= data.size();
         pNon /= data.size();
 
@@ -76,14 +100,21 @@ public class Tree {
         return Math.log(x) / Math.log(2.);
     }
 
+//    public Double pertinence(String att) {
+//        Double total = null;
+//        for (int v : getUniqueValues(att)) {
+//            if (total == null) {
+//                total = partPertinence(v, att);
+//            } else {
+//                total -= partPertinence(v, att);
+//            }
+//        }
+//        return total;
+//    }
     public Double pertinence(String att) {
-        Double total = null;
+        Double total = entropie();
         for (int v : getUniqueValues(att)) {
-            if (total == null) {
-                total = partPertinence(v, att);
-            } else {
-                total -= partPertinence(v, att);
-            }
+            total -= partPertinence(v, att);
         }
         return total;
     }
