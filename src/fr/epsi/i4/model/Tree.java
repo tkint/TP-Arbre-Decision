@@ -1,36 +1,38 @@
 package fr.epsi.i4.model;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by tkint on 23/11/2017.
  */
 public class Tree {
 
-    private Node tree;
-    private List<Entry> data;
+	public List<Integer> ciels;
 
-    public List<Integer> ciels;
-    public List<Integer> temperatures;
-    public List<Integer> humidites;
-    public List<Integer> vents;
-    public List<Integer> jouers;
+	public List<Integer> temperatures;
 
-    public Tree() {
-        data = new ArrayList<>();
+	public List<Integer> humidites;
 
-        ciels = new ArrayList<>();
-        temperatures = new ArrayList<>();
-        humidites = new ArrayList<>();
-        vents = new ArrayList<>();
-        jouers = new ArrayList<>();
-    }
+	public List<Integer> vents;
 
-    public Entry addEntry(Entry entry) {
+	public List<Integer> jouers;
+
+	private Node tree;
+
+	private List<Entry> data;
+
+	public Tree() {
+		data = new ArrayList<>();
+
+		ciels = new ArrayList<>();
+		temperatures = new ArrayList<>();
+		humidites = new ArrayList<>();
+		vents = new ArrayList<>();
+		jouers = new ArrayList<>();
+	}
+/*
+	public Entry addEntry(Entry entry) {
         ciels.add(entry.getCiel());
         temperatures.add(entry.getTemperature());
         humidites.add(entry.getHumidite());
@@ -157,4 +159,5 @@ public class Tree {
 
         return values;
     }
+*/
 }

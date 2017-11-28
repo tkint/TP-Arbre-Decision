@@ -1,33 +1,191 @@
 package fr.epsi.i4.model;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by tkint on 23/11/2017.
  */
 public class Node {
-    private String value;
-    private List<Branch> children;
 
-    public Node(String value) {
-        this.value = value;
-        this.children = new ArrayList<>();
-    }
+	public List<Integer> ciels;
 
-    public String getValue() {
-        return value;
-    }
+	public List<Integer> temperatures;
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+	public List<Integer> humidites;
 
-    public List<Branch> getChildren() {
-        return children;
-    }
+	public List<Integer> vents;
 
-    public void setChildren(List<Branch> children) {
-        this.children = children;
-    }
+	public List<Integer> jouers;
+
+	private String value;
+
+	private List<Branch> children;
+
+	private List<Entry> data;
+
+	public Node() {
+		this.children = new ArrayList<>();
+		this.data = new ArrayList<>();
+
+		this.ciels = new ArrayList<>();
+		this.temperatures = new ArrayList<>();
+		this.humidites = new ArrayList<>();
+		this.vents = new ArrayList<>();
+		this.jouers = new ArrayList<>();
+	}
+
+	public Node(String value) {
+		this();
+		this.value = value;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public List<Branch> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<Branch> children) {
+		this.children = children;
+	}
+
+	public Entry addEntry(Entry entry) {
+		ciels.add(entry.getCiel());
+		temperatures.add(entry.getTemperature());
+		humidites.add(entry.getHumidite());
+		vents.add(entry.getVent());
+		jouers.add(entry.getJouer());
+
+		data.add(entry);
+
+		return entry;
+	}
+
+	public double entropie(int value, String att) {
+		double pOui = 0;
+		double pNon = 0;
+
+		Field field = null;
+		try {
+			field = Entry.class.getField(att);
+
+			for (Entry entry : data) {
+				if (((Integer) field.get(entry)) == value) {
+					if (entry.getJouer() == 0) {
+						pNon++;
+					} else {
+						pOui++;
+					}
+				}
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		if (pOui == 0 || pNon == 0) {
+			return 0d;
+		}
+
+		pOui /= data.size();
+		pNon /= data.size();
+
+		return -pOui * log2(pOui) - pNon * log2(pNon);
+	}
+
+	public double entropie() {
+		double pOui = 0;
+		double pNon = 0;
+
+		for (Entry entry : data) {
+			if (entry.getJouer() == 0) {
+				pNon++;
+			} else {
+				pOui++;
+			}
+		}
+		if (pOui == 0 || pNon == 0) {
+			return 0d;
+		}
+
+		pOui /= data.size();
+		pNon /= data.size();
+
+		return -pOui * log2(pOui) - pNon * log2(pNon);
+	}
+
+	private double log2(double x) {
+		if (x == 0) {
+			return 0d;
+		}
+		return Math.log(x) / Math.log(2.);
+	}
+
+	//    public Double pertinence(String att) {
+	//        Double total = null;
+	//        for (int v : getUniqueValues(att)) {
+	//            if (total == null) {
+	//                total = partPertinence(v, att);
+	//            } else {
+	//                total -= partPertinence(v, att);
+	//            }
+	//        }
+	//        return total;
+	//    }
+
+	public Double pertinence(String att) {
+		Double total = entropie();
+		for (int v : getUniqueValues(att)) {
+			total -= partPertinence(v, att);
+		}
+		return total;
+	}
+
+	private double partPertinence(int value, String att) {
+		return getRatio(value, att) * entropie(value, att);
+	}
+
+	public double getRatio(int value, String att) {
+		double nb = 0d;
+		Field field = null;
+		List<Integer> values = new ArrayList<>();
+		try {
+			field = this.getClass().getField(att + "s");
+
+			values = (List<Integer>) field.get(this);
+
+			for (int v : values) {
+				if (v == value) {
+					nb++;
+				}
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		return nb / values.size();
+	}
+
+	public Set<Integer> getUniqueValues(String att) {
+		Set<Integer> uniqueValues = new HashSet<>();
+		Field field = null;
+		try {
+			field = this.getClass().getField(att + "s");
+
+			uniqueValues.addAll((List<Integer>) field.get(this));
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		return uniqueValues;
+	}
 }
