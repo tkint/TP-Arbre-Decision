@@ -1,10 +1,14 @@
 package fr.epsi.i4.model;
 
+import fr.epsi.i4.utils.ConsoleColors;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static fr.epsi.i4.utils.ConsoleColors.*;
 
 /**
  * Created by tkint on 23/11/2017.
@@ -252,13 +256,20 @@ public class Node {
 
     public void display() {
         if (getValue() != null && children.size() > 0) {
-            System.out.print(" - " + getValue().toUpperCase() + " - ");
+            System.out.print(" - " + RED + getValue().toUpperCase() + RESET + " - ");
             System.out.println("");
             System.out.print("| ");
             for (Branch child : children) {
-                System.out.print(getStringValue(Integer.valueOf(child.getValue()), getValue()));
+                System.out.print(BLUE + getStringValue(Integer.valueOf(child.getValue()), getValue()).toUpperCase() + RESET);
                 if (child.getChild().getValue() != null) {
-                    System.out.print(" -> " + child.getChild().getValue().toUpperCase());
+                    System.out.print(" -> ");
+                    if (child.getChild().getValue().toLowerCase().equals("oui")
+                            || child.getChild().getValue().toLowerCase().equals("non")) {
+                        System.out.print(GREEN);
+                    } else {
+                        System.out.print(RED_UNDERLINED);
+                    }
+                    System.out.print(child.getChild().getValue().toUpperCase() + RESET);
                 }
                 System.out.print(" | ");
             }
@@ -276,46 +287,46 @@ public class Node {
             case "ciel":
                 switch (value) {
                     case 0:
-                        stringValue = "SOLEIL";
+                        stringValue = "soleil";
                         break;
                     case 1:
-                        stringValue = "COUVERT";
+                        stringValue = "couvert";
                         break;
                     case 2:
-                        stringValue = "PLUIE";
+                        stringValue = "pluie";
                         break;
                 }
                 break;
             case "temperature":
                 switch (value) {
                     case 0:
-                        stringValue = "CHAUD";
+                        stringValue = "chaud";
                         break;
                     case 1:
-                        stringValue = "DOUX";
+                        stringValue = "doux";
                         break;
                     case 2:
-                        stringValue = "FROID";
+                        stringValue = "froid";
                         break;
                 }
                 break;
             case "humidite":
                 switch (value) {
                     case 0:
-                        stringValue = "ELEVEE";
+                        stringValue = "elevee";
                         break;
                     case 1:
-                        stringValue = "NORMALE";
+                        stringValue = "normale";
                         break;
                 }
                 break;
             case "vent":
                 switch (value) {
                     case 0:
-                        stringValue = "FAIBLE";
+                        stringValue = "faible";
                         break;
                     case 1:
-                        stringValue = "FORT";
+                        stringValue = "fort";
                         break;
                 }
                 break;
