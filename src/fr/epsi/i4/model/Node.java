@@ -146,18 +146,6 @@ public class Node {
         return Math.log(x) / Math.log(2.);
     }
 
-    //    public Double pertinence(String att) {
-    //        Double total = null;
-    //        for (int v : getUniqueValues(att)) {
-    //            if (total == null) {
-    //                total = partPertinence(v, att);
-    //            } else {
-    //                total -= partPertinence(v, att);
-    //            }
-    //        }
-    //        return total;
-    //    }
-
     public Double pertinence(String att) {
         Double total = entropie();
         for (int v : getUniqueValues(att)) {
