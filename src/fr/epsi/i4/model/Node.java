@@ -43,6 +43,22 @@ public class Node {
 		this.value = value;
 	}
 
+	public Node(Integer valueToKeep, String att, List<Entry> data) {
+		this();
+		Field field = null;
+		try {
+			field = Entry.class.getField(att);
+
+			for (Entry entry : data) {
+				if (field.get(entry).equals(valueToKeep)) {
+					addEntry(entry);
+				}
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+
 	public String getValue() {
 		return value;
 	}
@@ -57,6 +73,11 @@ public class Node {
 
 	public void setChildren(List<Branch> children) {
 		this.children = children;
+	}
+
+	public Branch addChild(Branch branch) {
+		children.add(branch);
+		return branch;
 	}
 
 	public Entry addEntry(Entry entry) {
@@ -187,5 +208,41 @@ public class Node {
 		}
 
 		return uniqueValues;
+	}
+
+	public String getPlusPertinent() {
+		Double pertinence = 0d;
+		Field fieldPlusPertinent = null;
+
+		try {
+			Field[] fields = Entry.class.getFields();
+			for (int i = 0; i < fields.length - 1; i++) {
+				Double p = pertinence(fields[i].getName());
+				if (p > pertinence) {
+					pertinence = p;
+					fieldPlusPertinent = fields[i];
+				}
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		if (fieldPlusPertinent == null) {
+			return null;
+		}
+
+		return fieldPlusPertinent.getName();
+	}
+
+	// TODO: Ajouter les conditions d'arrêt
+	// TODO: Ajouter l'appel à generateTree de l'enfant
+	public Node generateTree() {
+		String plusPertinent = getPlusPertinent();
+		setValue(plusPertinent);
+		for (Integer value : getUniqueValues(plusPertinent)) {
+			Branch branch = addChild(new Branch(Integer.toString(value)));
+			branch.setChild(new Node(value, plusPertinent, data));
+		}
+		return this;
 	}
 }

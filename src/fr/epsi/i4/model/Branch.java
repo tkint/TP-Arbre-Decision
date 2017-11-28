@@ -7,6 +7,10 @@ public class Branch {
     private String value;
     private Node child;
 
+    public Branch(String value) {
+        this.value = value;
+    }
+
     public Branch(String value, Node child) {
         this.value = value;
         this.child = child;

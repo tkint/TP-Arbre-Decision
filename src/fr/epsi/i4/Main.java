@@ -37,6 +37,10 @@ public class Main {
         System.out.println("Pertinence de temperature : " + root.pertinence("temperature"));
         System.out.println("Pertinence de humidite : " + root.pertinence("humidite"));
         System.out.println("Pertinence de vent : " + root.pertinence("vent"));
+
+        System.out.println("--------------------------------------------");
+
+        System.out.println(root.getPlusPertinent());
     }
 
     public static void afficheRatio(Node node, String att) {
