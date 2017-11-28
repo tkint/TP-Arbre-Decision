@@ -23,24 +23,29 @@ public class Main {
         root.addEntry(new Entry(1, 0, 1, 0, 1));
         root.addEntry(new Entry(2, 1, 0, 1, 0));
 
-        afficheEntropie(root, "ciel");
-        afficheEntropie(root, "temperature");
-        afficheEntropie(root, "humidite");
-        afficheEntropie(root, "vent");
+//        afficheEntropie(root, "ciel");
+//        afficheEntropie(root, "temperature");
+//        afficheEntropie(root, "humidite");
+//        afficheEntropie(root, "vent");
+//
+//        afficheRatio(root, "ciel");
+//        afficheRatio(root, "temperature");
+//        afficheRatio(root, "humidite");
+//        afficheRatio(root, "vent");
+//
+//        System.out.println("Pertinence de ciel : " + root.pertinence("ciel"));
+//        System.out.println("Pertinence de temperature : " + root.pertinence("temperature"));
+//        System.out.println("Pertinence de humidite : " + root.pertinence("humidite"));
+//        System.out.println("Pertinence de vent : " + root.pertinence("vent"));
+//
+//        System.out.println("--------------------------------------------");
+//
+//        System.out.println(root.getPlusPertinent());
+//
+//        System.out.println("--------------------------------------------");
 
-        afficheRatio(root, "ciel");
-        afficheRatio(root, "temperature");
-        afficheRatio(root, "humidite");
-        afficheRatio(root, "vent");
-
-        System.out.println("Pertinence de ciel : " + root.pertinence("ciel"));
-        System.out.println("Pertinence de temperature : " + root.pertinence("temperature"));
-        System.out.println("Pertinence de humidite : " + root.pertinence("humidite"));
-        System.out.println("Pertinence de vent : " + root.pertinence("vent"));
-
-        System.out.println("--------------------------------------------");
-
-        System.out.println(root.getPlusPertinent());
+        Node tree = root.generateTree();
+        tree.display();
     }
 
     public static void afficheRatio(Node node, String att) {

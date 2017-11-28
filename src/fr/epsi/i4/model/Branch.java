@@ -28,7 +28,12 @@ public class Branch {
         return child;
     }
 
-    public void setChild(Node child) {
+    public Node setChild(Node child) {
         this.child = child;
+        return child;
+    }
+
+    public void display() {
+        System.out.print(value + " | ");
     }
 }
