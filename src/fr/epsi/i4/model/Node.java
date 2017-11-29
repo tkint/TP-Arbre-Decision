@@ -280,7 +280,7 @@ public class Node {
         }
     }
 
-    public String getStringValue(Integer value, String att) {
+    public static String getStringValue(Integer value, String att) {
         String stringValue = null;
 
         switch (att) {
