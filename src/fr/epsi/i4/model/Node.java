@@ -17,16 +17,6 @@ import static fr.epsi.i4.utils.ConsoleColors.RESET;
  */
 public class Node {
 
-	public List<Integer> ciels;
-
-	public List<Integer> temperatures;
-
-	public List<Integer> humidites;
-
-	public List<Integer> vents;
-
-	public List<Integer> jouers;
-
 	private String value;
 
 	private List<Branch> children;
@@ -36,12 +26,6 @@ public class Node {
 	public Node() {
 		this.children = new ArrayList<>();
 		this.data = new ArrayList<>();
-
-		this.ciels = new ArrayList<>();
-		this.temperatures = new ArrayList<>();
-		this.humidites = new ArrayList<>();
-		this.vents = new ArrayList<>();
-		this.jouers = new ArrayList<>();
 	}
 
 	public Node(Integer valueToKeep, String att, List<Entry> data) {
@@ -82,14 +66,12 @@ public class Node {
 	}
 
 	public Entry addEntry(Entry entry) {
-		ciels.add(entry.getCiel());
-		temperatures.add(entry.getTemperature());
-		humidites.add(entry.getHumidite());
-		vents.add(entry.getVent());
-		jouers.add(entry.getJouer());
-
-		data.add(entry);
-
+		try {
+			data.add(entry);
+		} catch (OutOfMemoryError e) {
+			System.out.println(data.size());
+			throw e;
+		}
 		return entry;
 	}
 
@@ -169,9 +151,11 @@ public class Node {
 		Field field = null;
 		List<Integer> values = new ArrayList<>();
 		try {
-			field = this.getClass().getField(att + "s");
+			field = Entry.class.getField(att);
 
-			values = (List<Integer>) field.get(this);
+			for (Entry entry : data) {
+				values.add((Integer) field.get(entry));
+			}
 
 			for (int v : values) {
 				if (v == value) {
@@ -189,9 +173,11 @@ public class Node {
 		Set<Integer> uniqueValues = new HashSet<>();
 		Field field = null;
 		try {
-			field = this.getClass().getField(att + "s");
+			field = Entry.class.getField(att);
 
-			uniqueValues.addAll((List<Integer>) field.get(this));
+			for (Entry entry : data) {
+				uniqueValues.add((Integer) field.get(entry));
+			}
 		} catch (Exception e) {
 			System.out.println("getUniqueValues: " + e);
 		}

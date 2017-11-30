@@ -10,9 +10,9 @@ public class Main {
 
 		Node tree = new Node();
 
-		generateData(tree);
+		//		generateData(tree);
 
-		//		generateRandomData(root, 1000000000);
+		generateRandomData(tree, 1000000000);
 
 		tree.generateTree();
 		tree.print();
@@ -23,9 +23,9 @@ public class Main {
 
 		//		tree.decide();
 
-		tree.decide(new Entry(0, 2, 2, 1, 1), tree);
+		//		tree.decide(new Entry(0, 2, 2, 1, 1), tree);
 
-		tree.print();
+		//		tree.print();
 	}
 
 	public static void generateData(Node tree) {

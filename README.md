@@ -4,7 +4,6 @@
 
 #### Out of memory :
 * Try catch -> remove data.get(0) + stock dans var la taille de data
-
 * Dans le try, juste après avoir passé l’instruction qui peut planter et si var est set, on stop le programme en affichant var (comme ça on connaît la taille maximale)
 
 #### Decide :
@@ -19,3 +18,11 @@
   * Avec Jouer = NON
 * Regen arbre
 * Recommencer le decide
+
+#### Stockage des données :
+* Fichier texte
+  * Les entries sous forme de liste :
+    * [att1], [att2], [att3], [att4], etc
+  * La taille maximum de data
+* Au lancement du programme, on charge les données
+* A la modification de data, on sauvegarde les données
