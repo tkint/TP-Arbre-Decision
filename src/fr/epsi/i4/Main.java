@@ -28,26 +28,24 @@ public class Main {
 
 		decide(root);
 	}
-  
-  public static void decide(Node root) {
-        Node current = root;
-        Scanner input = new Scanner(System.in);
-        System.out.println("Est-ce qu'on sort?");
-        System.out.println(root.getValue());
-        while (current.getChildren().size() > 0) {
-            for (Branch child : current.getChildren()) {
-                System.out.print(getStringValue(Integer.valueOf(child.getValue()), current.getValue()) + "(" + child.getValue() + ") ");
-            }
-            System.out.println("");
-            int i = input.nextInt();
-            for (Branch child : current.getChildren()) {
-                if (Integer.valueOf(child.getValue()).equals(i)) {
-                    current = child.getChild();
-                    System.out.println(child.getChild().getValue());
-                }
-            }
-        }
-    }
+
+	public static void decide(Node node) {
+		Scanner input = new Scanner(System.in);
+		System.out.println(node.getValue());
+		if (node.getChildren().size() > 0) {
+			for (Branch child : node.getChildren()) {
+				System.out.print(getStringValue(Integer.valueOf(child.getValue()), node.getValue()));
+				System.out.print("(" + child.getValue() + ") ");
+			}
+			System.out.println("");
+			int i = input.nextInt();
+			for (Branch child : node.getChildren()) {
+				if (Integer.valueOf(child.getValue()).equals(i)) {
+					decide(child.getChild());
+				}
+			}
+		}
+	}
 
 	public static void generateData(Node root) {
 		root.addEntry(new Entry(0, 0, 0, 0, 0));
