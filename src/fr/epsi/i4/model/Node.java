@@ -254,32 +254,6 @@ public class Node {
         return this;
     }
 
-    public void display() {
-        if (getValue() != null && children.size() > 0) {
-            System.out.print(" - " + RED + getValue().toUpperCase() + RESET + " - ");
-            System.out.println("");
-            System.out.print("| ");
-            for (Branch child : children) {
-                System.out.print(BLUE + getStringValue(Integer.valueOf(child.getValue()), getValue()).toUpperCase() + RESET);
-                if (child.getChild().getValue() != null) {
-                    System.out.print(" -> ");
-                    if (child.getChild().getValue().toLowerCase().equals("oui")
-                            || child.getChild().getValue().toLowerCase().equals("non")) {
-                        System.out.print(GREEN);
-                    } else {
-                        System.out.print(RED_UNDERLINED);
-                    }
-                    System.out.print(child.getChild().getValue().toUpperCase() + RESET);
-                }
-                System.out.print(" | ");
-            }
-            System.out.println();
-            for (Branch child : children) {
-                child.getChild().display();
-            }
-        }
-    }
-
     public static String getStringValue(Integer value, String att) {
         String stringValue = null;
 
