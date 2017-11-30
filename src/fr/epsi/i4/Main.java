@@ -2,30 +2,37 @@ package fr.epsi.i4;
 
 import fr.epsi.i4.model.Entry;
 import fr.epsi.i4.model.Node;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main {
 
 	public static void main(String[] args) {
-		long time = System.currentTimeMillis();
-
-		Node tree = new Node();
-
-		//		generateData(tree);
-
-		generateRandomData(tree, 1000000000);
-
-		tree.generateTree();
-		tree.print();
-
-		time = System.currentTimeMillis() - time;
-
-		System.out.println("Programme exécuté en " + time / 1000f + " secondes");
-
-		//		tree.decide();
-
-		//		tree.decide(new Entry(0, 2, 2, 1, 1), tree);
-
-		//		tree.print();
+                long time = System.currentTimeMillis();
+                
+                Node tree = new Node();
+                tree.readFile();
+                
+                //		generateData(tree);
+                
+//                generateRandomData(tree, 1000000);
+                
+                tree.generateTree();
+                tree.print();
+                
+                time = System.currentTimeMillis() - time;
+                
+                System.out.println("Programme exécuté en " + time / 1000f + " secondes");
+                
+//                System.out.println(tree.getData().get(0).toString());
+                //		tree.decide();
+                
+                		tree.decide(new Entry(1, 0, 1, 1, 0), tree);
+                
+                //		tree.print();
+           
 	}
 
 	public static void generateData(Node tree) {

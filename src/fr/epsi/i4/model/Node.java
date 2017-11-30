@@ -11,390 +11,438 @@ import static fr.epsi.i4.utils.ConsoleColors.BLUE;
 import static fr.epsi.i4.utils.ConsoleColors.GREEN;
 import static fr.epsi.i4.utils.ConsoleColors.RED;
 import static fr.epsi.i4.utils.ConsoleColors.RESET;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by tkint on 23/11/2017.
  */
 public class Node {
 
-	private String value;
+    private String value;
 
-	private List<Branch> children;
+    private List<Branch> children;
 
-	private List<Entry> data;
+    private List<Entry> data;
 
-	public Node() {
-		this.children = new ArrayList<>();
-		this.data = new ArrayList<>();
-	}
+    public Node() {
+        this.children = new ArrayList<>();
+        this.data = new ArrayList<>();
+    }
 
-	public Node(Integer valueToKeep, String att, List<Entry> data) {
-		this();
-		Field field = null;
-		try {
-			field = Entry.class.getField(att);
+    public Node(Integer valueToKeep, String att, List<Entry> data) {
+        this();
+        Field field = null;
+        try {
+            field = Entry.class.getField(att);
 
-			for (Entry entry : data) {
-				if (field.get(entry).equals(valueToKeep)) {
-					addEntry(entry);
-				}
-			}
-		} catch (Exception e) {
-			System.out.println("Node: " + e);
-		}
-	}
+            for (Entry entry : data) {
+                if (field.get(entry).equals(valueToKeep)) {
+                    addEntry(entry);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Node: " + e);
+        }
+    }
 
-	public String getValue() {
-		return value;
-	}
+    public String getValue() {
+        return value;
+    }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+    public void setValue(String value) {
+        this.value = value;
+    }
 
-	public List<Branch> getChildren() {
-		return children;
-	}
+    public List<Branch> getChildren() {
+        return children;
+    }
 
-	public void setChildren(List<Branch> children) {
-		this.children = children;
-	}
+    public void setChildren(List<Branch> children) {
+        this.children = children;
+    }
 
-	public Branch addChild(Branch branch) {
-		children.add(branch);
-		return branch;
-	}
+    public Branch addChild(Branch branch) {
+        children.add(branch);
+        return branch;
+    }
 
-	public Entry addEntry(Entry entry) {
-		try {
-			data.add(entry);
-		} catch (OutOfMemoryError e) {
-			System.out.println(data.size());
-			throw e;
-		}
-		return entry;
-	}
+    public Entry addEntry(Entry entry) {
+        try {
+            data.add(entry);
+        } catch (OutOfMemoryError e) {
+            System.out.println(data.size());
+            throw e;
+        }
+        return entry;
+    }
 
-	public double entropie(int value, String att) {
-		double pOui = 0;
-		double pNon = 0;
+    public double entropie(int value, String att) {
+        double pOui = 0;
+        double pNon = 0;
 
-		Field field = null;
-		try {
-			field = Entry.class.getField(att);
+        Field field = null;
+        try {
+            field = Entry.class.getField(att);
 
-			for (Entry entry : data) {
-				if (((Integer) field.get(entry)) == value) {
-					if (entry.getJouer() == 0) {
-						pNon++;
-					} else {
-						pOui++;
-					}
-				}
-			}
-		} catch (Exception e) {
-			System.out.println("entropie: " + e);
-		}
+            for (Entry entry : data) {
+                if (((Integer) field.get(entry)) == value) {
+                    if (entry.getJouer() == 0) {
+                        pNon++;
+                    } else {
+                        pOui++;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("entropie: " + e);
+        }
 
-		if (pOui == 0 || pNon == 0) {
-			return 0d;
-		}
+        if (pOui == 0 || pNon == 0) {
+            return 0d;
+        }
 
-		pOui /= data.size();
-		pNon /= data.size();
+        pOui /= data.size();
+        pNon /= data.size();
 
-		return -pOui * log2(pOui) - pNon * log2(pNon);
-	}
+        return -pOui * log2(pOui) - pNon * log2(pNon);
+    }
 
-	public double entropie() {
-		double pOui = 0;
-		double pNon = 0;
+    public double entropie() {
+        double pOui = 0;
+        double pNon = 0;
 
-		for (Entry entry : data) {
-			if (entry.getJouer() == 0) {
-				pNon++;
-			} else {
-				pOui++;
-			}
-		}
-		if (pOui == 0 || pNon == 0) {
-			return 0d;
-		}
+        for (Entry entry : data) {
+            if (entry.getJouer() == 0) {
+                pNon++;
+            } else {
+                pOui++;
+            }
+        }
+        if (pOui == 0 || pNon == 0) {
+            return 0d;
+        }
 
-		pOui /= data.size();
-		pNon /= data.size();
+        pOui /= data.size();
+        pNon /= data.size();
 
-		return -pOui * log2(pOui) - pNon * log2(pNon);
-	}
+        return -pOui * log2(pOui) - pNon * log2(pNon);
+    }
 
-	private double log2(double x) {
-		if (x == 0) {
-			return 0d;
-		}
-		return Math.log(x) / Math.log(2.);
-	}
+    private double log2(double x) {
+        if (x == 0) {
+            return 0d;
+        }
+        return Math.log(x) / Math.log(2.);
+    }
 
-	public Double pertinence(String att) {
-		Double total = entropie();
-		for (int v : getUniqueValues(att)) {
-			total -= partPertinence(v, att);
-		}
-		return total;
-	}
+    public Double pertinence(String att) {
+        Double total = entropie();
+        for (int v : getUniqueValues(att)) {
+            total -= partPertinence(v, att);
+        }
+        return total;
+    }
 
-	private double partPertinence(int value, String att) {
-		return getRatio(value, att) * entropie(value, att);
-	}
+    private double partPertinence(int value, String att) {
+        return getRatio(value, att) * entropie(value, att);
+    }
 
-	public double getRatio(int value, String att) {
-		double nb = 0d;
-		Field field = null;
-		List<Integer> values = new ArrayList<>();
-		try {
-			field = Entry.class.getField(att);
+    public double getRatio(int value, String att) {
+        double nb = 0d;
+        Field field = null;
+        List<Integer> values = new ArrayList<>();
+        try {
+            field = Entry.class.getField(att);
 
-			for (Entry entry : data) {
-				values.add((Integer) field.get(entry));
-			}
+            for (Entry entry : data) {
+                values.add((Integer) field.get(entry));
+            }
 
-			for (int v : values) {
-				if (v == value) {
-					nb++;
-				}
-			}
-		} catch (Exception e) {
-			System.out.println("getRatio: " + e);
-		}
+            for (int v : values) {
+                if (v == value) {
+                    nb++;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("getRatio: " + e);
+        }
 
-		return nb / values.size();
-	}
+        return nb / values.size();
+    }
 
-	public Set<Integer> getUniqueValues(String att) {
-		Set<Integer> uniqueValues = new HashSet<>();
-		Field field = null;
-		try {
-			field = Entry.class.getField(att);
+    public Set<Integer> getUniqueValues(String att) {
+        Set<Integer> uniqueValues = new HashSet<>();
+        Field field = null;
+        try {
+            field = Entry.class.getField(att);
 
-			for (Entry entry : data) {
-				uniqueValues.add((Integer) field.get(entry));
-			}
-		} catch (Exception e) {
-			System.out.println("getUniqueValues: " + e);
-		}
+            for (Entry entry : data) {
+                uniqueValues.add((Integer) field.get(entry));
+            }
+        } catch (Exception e) {
+            System.out.println("getUniqueValues: " + e);
+        }
 
-		return uniqueValues;
-	}
+        return uniqueValues;
+    }
 
-	public String getPlusPertinent() {
-		Double pertinence = 0d;
-		Field fieldPlusPertinent = null;
+    public String getPlusPertinent() {
+        Double pertinence = 0d;
+        Field fieldPlusPertinent = null;
 
-		try {
-			Field[] fields = Entry.class.getFields();
-			for (int i = 0; i < fields.length - 1; i++) {
-				Double p = pertinence(fields[i].getName());
-				if (p > pertinence) {
-					pertinence = p;
-					fieldPlusPertinent = fields[i];
-				}
-			}
-		} catch (Exception e) {
-			System.out.println("getPlusPertinent: " + e);
-		}
+        try {
+            Field[] fields = Entry.class.getFields();
+            for (int i = 0; i < fields.length - 1; i++) {
+                Double p = pertinence(fields[i].getName());
+                if (p > pertinence) {
+                    pertinence = p;
+                    fieldPlusPertinent = fields[i];
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("getPlusPertinent: " + e);
+        }
 
-		if (fieldPlusPertinent == null) {
-			return null;
-		}
+        if (fieldPlusPertinent == null) {
+            return null;
+        }
 
-		return fieldPlusPertinent.getName();
-	}
+        return fieldPlusPertinent.getName();
+    }
 
-	public String getOuiNon() {
-		double pOui = 0;
-		double pNon = 0;
+    public String getOuiNon() {
+        double pOui = 0;
+        double pNon = 0;
 
-		for (Entry entry : data) {
-			if (entry.getJouer() == 0) {
-				pNon++;
-			} else {
-				pOui++;
-			}
-		}
+        for (Entry entry : data) {
+            if (entry.getJouer() == 0) {
+                pNon++;
+            } else {
+                pOui++;
+            }
+        }
 
-		if (pOui > pNon) {
-			return "Oui";
-		}
-		return "Non";
-	}
+        if (pOui > pNon) {
+            return "Oui";
+        }
+        return "Non";
+    }
 
-	public void regenerateTree() {
-		setChildren(new ArrayList<>());
-		generateTree();
-	}
+    public void regenerateTree() {
+        setChildren(new ArrayList<>());
+        generateTree();
+        print();
+    }
 
-	public void generateTree() {
-		String plusPertinent = getPlusPertinent();
-		if (plusPertinent != null) {
-			setValue(plusPertinent);
-			for (Integer value : getUniqueValues(plusPertinent)) {
-				Branch branch = addChild(new Branch(String.valueOf(value)));
-				Node child = branch.setChild(new Node(value, plusPertinent, data));
-				child.generateTree();
-			}
-		} else {
-			setValue(getOuiNon());
-		}
-	}
+    public void generateTree() {
+        String plusPertinent = getPlusPertinent();
+        if (plusPertinent != null) {
+            setValue(plusPertinent);
+            for (Integer value : getUniqueValues(plusPertinent)) {
+                Branch branch = addChild(new Branch(String.valueOf(value)));
+                Node child = branch.setChild(new Node(value, plusPertinent, data));
+                child.generateTree();
+            }
+        } else {
+            setValue(getOuiNon());
+        }
+    }
 
-	public String getStringValue(Integer value, String att) {
-		String stringValue = null;
+    public String getStringValue(Integer value, String att) {
+        String stringValue = null;
 
-		switch (att) {
-			case "ciel":
-				switch (value) {
-					case 0:
-						stringValue = "soleil";
-						break;
-					case 1:
-						stringValue = "couvert";
-						break;
-					case 2:
-						stringValue = "pluie";
-						break;
-				}
-				break;
-			case "temperature":
-				switch (value) {
-					case 0:
-						stringValue = "chaud";
-						break;
-					case 1:
-						stringValue = "doux";
-						break;
-					case 2:
-						stringValue = "froid";
-						break;
-				}
-				break;
-			case "humidite":
-				switch (value) {
-					case 0:
-						stringValue = "elevee";
-						break;
-					case 1:
-						stringValue = "normale";
-						break;
-				}
-				break;
-			case "vent":
-				switch (value) {
-					case 0:
-						stringValue = "faible";
-						break;
-					case 1:
-						stringValue = "fort";
-						break;
-				}
-				break;
-		}
+        switch (att) {
+            case "ciel":
+                switch (value) {
+                    case 0:
+                        stringValue = "soleil";
+                        break;
+                    case 1:
+                        stringValue = "couvert";
+                        break;
+                    case 2:
+                        stringValue = "pluie";
+                        break;
+                }
+                break;
+            case "temperature":
+                switch (value) {
+                    case 0:
+                        stringValue = "chaud";
+                        break;
+                    case 1:
+                        stringValue = "doux";
+                        break;
+                    case 2:
+                        stringValue = "froid";
+                        break;
+                }
+                break;
+            case "humidite":
+                switch (value) {
+                    case 0:
+                        stringValue = "elevee";
+                        break;
+                    case 1:
+                        stringValue = "normale";
+                        break;
+                }
+                break;
+            case "vent":
+                switch (value) {
+                    case 0:
+                        stringValue = "faible";
+                        break;
+                    case 1:
+                        stringValue = "fort";
+                        break;
+                }
+                break;
+        }
 
-		return stringValue;
-	}
+        return stringValue;
+    }
 
-	public void print() {
-		print("#", true, "");
-	}
+    public void print() {
+        print("#", true, "");
+    }
 
-	private void print(String prefix, boolean isTail, String branchValue) {
-		boolean ouiNon = value.toLowerCase().equals("oui") || value.toLowerCase().equals("non");
-		String txt = prefix;
-		txt += branchValue != "" ? isTail ? "└── " : "├── " : " ── ";
-		txt += branchValue != "" ? BLUE + branchValue + RESET + " => " : BLUE;
-		txt += ouiNon ? GREEN : RED;
-		txt += value.toUpperCase() + RESET;
-		System.out.println(txt);
-		txt = prefix;
-		txt += isTail ? "     " : "│    ";
-		for (int i = 0; i < children.size() - 1; i++) {
-			branchValue = getStringValue(Integer.valueOf(children.get(i).getValue()), getValue());
-			branchValue += " (" + children.get(i).getValue() + ")";
-			children.get(i).getChild().print(txt, false, branchValue.toUpperCase());
-		}
-		if (children.size() > 0) {
-			branchValue = getStringValue(Integer.valueOf(children.get(children.size() - 1).getValue()), getValue());
-			branchValue += " (" + children.get(children.size() - 1).getValue() + ")";
-			children.get(children.size() - 1).getChild().print(txt, true, branchValue.toUpperCase());
-		}
-	}
+    private void print(String prefix, boolean isTail, String branchValue) {
+        boolean ouiNon = value.toLowerCase().equals("oui") || value.toLowerCase().equals("non");
+        String txt = prefix;
+        txt += branchValue != "" ? isTail ? "└── " : "├── " : " ── ";
+        txt += branchValue != "" ? BLUE + branchValue + RESET + " => " : BLUE;
+        txt += ouiNon ? GREEN : RED;
+        txt += value.toUpperCase() + RESET;
+        System.out.println(txt);
+        txt = prefix;
+        txt += isTail ? "     " : "│    ";
+        for (int i = 0; i < children.size() - 1; i++) {
+            branchValue = getStringValue(Integer.valueOf(children.get(i).getValue()), getValue());
+            branchValue += " (" + children.get(i).getValue() + ")";
+            children.get(i).getChild().print(txt, false, branchValue.toUpperCase());
+        }
+        if (children.size() > 0) {
+            branchValue = getStringValue(Integer.valueOf(children.get(children.size() - 1).getValue()), getValue());
+            branchValue += " (" + children.get(children.size() - 1).getValue() + ")";
+            children.get(children.size() - 1).getChild().print(txt, true, branchValue.toUpperCase());
+        }
+    }
 
-	public void decide() {
-		Scanner input = new Scanner(System.in);
-		System.out.println(getValue());
-		if (getChildren().size() > 0) {
-			for (Branch child : getChildren()) {
-				System.out.print(getStringValue(Integer.valueOf(child.getValue()), getValue()));
-				System.out.print("(" + child.getValue() + ") ");
-			}
-			System.out.println("");
-			int i = input.nextInt();
-			for (Branch child : getChildren()) {
-				if (Integer.valueOf(child.getValue()).equals(i)) {
-					child.getChild().decide();
-				}
-			}
-		}
-	}
+    public void decide() {
+        Scanner input = new Scanner(System.in);
+        System.out.println(getValue());
+        if (getChildren().size() > 0) {
+            for (Branch child : getChildren()) {
+                System.out.print(getStringValue(Integer.valueOf(child.getValue()), getValue()));
+                System.out.print("(" + child.getValue() + ") ");
+            }
+            System.out.println("");
+            int i = input.nextInt();
+            for (Branch child : getChildren()) {
+                if (Integer.valueOf(child.getValue()).equals(i)) {
+                    child.getChild().decide();
+                }
+            }
+        }
+    }
 
-	public void decide(Entry entry, Node root) {
-		if (getChildren().size() == 0) {
-			System.out.println(getValue());
-			acceptOrRefuse(entry, root);
-		} else {
-			Field field = null;
-			try {
-				boolean trouve = false;
-				field = Entry.class.getField(getValue());
-				for (Branch child : getChildren()) {
-					if (Integer.valueOf(child.getValue()).equals(field.get(entry))) {
-						child.getChild().decide(entry, root);
-						trouve = true;
-					}
-				}
-				if (!trouve) {
-					System.out.println("Nouveau paramètre! " + field.get(entry));
-					root.addEntry(entry.clone(0));
-					root.addEntry(entry.clone(1));
-					root.regenerateTree();
-					root.decide(entry, root);
-				}
-			} catch (Exception e) {
-				System.out.println("decide: " + e);
-			}
-		}
-	}
+    public void decide(Entry entry, Node root) {
+        if (getChildren().size() == 0) {
+            System.out.println(getValue());
+            acceptOrRefuse(entry, root);
+        } else {
+            Field field = null;
+            try {
+                boolean trouve = false;
+                field = Entry.class.getField(getValue());
+                for (Branch child : getChildren()) {
+                    if (Integer.valueOf(child.getValue()).equals(field.get(entry))) {
+                        child.getChild().decide(entry, root);
+                        trouve = true;
+                    }
+                }
+                if (!trouve) {
+                    System.out.println("Nouveau paramètre! " + field.get(entry));
+                    root.addEntry(entry.clone(0));
+                    root.addEntry(entry.clone(1));
+                    root.regenerateTree();
+                    root.decide(entry, root);
+                }
+            } catch (Exception e) {
+                System.out.println("decide: " + e);
+            }
+        }
+    }
 
-	public void acceptOrRefuse(Entry entry, Node root) {
-		Scanner input = new Scanner(System.in);
-		System.out.println("Acceptez-vous la décision? [o/n]");
-		String choice = input.next();
+    public void acceptOrRefuse(Entry entry, Node root) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Acceptez-vous la décision? [o/n]");
+        String choice = input.next();
 
-		if (choice.equals("o")) {
-			System.out.println("Choix accepté, génial!");
-			if (getValue().toLowerCase().equals("oui")) {
-				entry.setJouer(1);
-			} else {
-				entry.setJouer(0);
-			}
-			root.addEntry(entry);
-		} else {
-			System.out.println("Choix refusé, regénération");
-			if (getValue().toLowerCase().equals("oui")) {
-				entry.setJouer(0);
-			} else {
-				entry.setJouer(1);
-			}
-			root.addEntry(entry);
-			root.regenerateTree();
-		}
-	}
+        if (choice.equals("o")) {
+            System.out.println("Choix accepté, génial!");
+            if (getValue().toLowerCase().equals("oui")) {
+                entry.setJouer(1);
+            } else {
+                entry.setJouer(0);
+            }
+            root.addEntry(entry);
+        } else {
+            System.out.println("Choix refusé, regénération");
+            if (getValue().toLowerCase().equals("oui")) {
+                entry.setJouer(0);
+            } else {
+                entry.setJouer(1);
+            }
+            root.addEntry(entry);
+            root.regenerateTree();
+        }
+        try {
+            writeFile();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void writeFile() throws FileNotFoundException, UnsupportedEncodingException {
+        PrintWriter writer = new PrintWriter("data.txt", "UTF-8");
+        for (Entry e : data){
+            writer.println(e.toString());
+        }
+        writer.close();
+    }
+    
+    public void readFile(){
+        List<Entry> dataTemp = data;
+        try {
+            File f = new File("data.txt");
+            BufferedReader b = new BufferedReader(new FileReader(f));
+            String readLine = "";
+            data = new ArrayList<>();
+            while ((readLine = b.readLine()) != null) {
+                Entry entry = new Entry();
+                entry.StringToObject(readLine);
+                this.data.add(entry);
+            }
+            
+        } catch (IOException e) {
+            data = dataTemp;
+            System.out.println("Aucune données");
+        }
+    }
+
+    public List<Entry> getData() {
+        return data;
+    }
 }

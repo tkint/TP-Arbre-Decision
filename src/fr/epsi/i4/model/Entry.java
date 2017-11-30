@@ -27,6 +27,14 @@ public class Entry {
         this.vent = vent;
         this.jouer = jouer;
     }
+    
+    public Entry() {
+        this.ciel = null;
+        this.temperature = null;
+        this.humidite = null;
+        this.vent = null;
+        this.jouer = null;
+    }
 
     public Integer getCiel() {
         return ciel;
@@ -75,4 +83,20 @@ public class Entry {
     public Entry clone(Integer jouer) {
         return new Entry(ciel, temperature, humidite, vent, jouer);
     }
+
+    @Override
+    public String toString() {
+        return ciel + "," + temperature + "," + humidite + "," + vent + "," + jouer;
+    }
+    
+    public void StringToObject(String s){
+        String[] split = s.split(",");
+        ciel = Integer.valueOf(split[0]);
+        temperature = Integer.valueOf(split[1]);
+        humidite = Integer.valueOf(split[2]);
+        vent = Integer.valueOf(split[3]);
+        jouer = Integer.valueOf(split[4]);
+    }
+    
+    
 }
