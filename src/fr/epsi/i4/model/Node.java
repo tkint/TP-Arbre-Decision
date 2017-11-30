@@ -254,7 +254,7 @@ public class Node {
         return this;
     }
 
-    public String getStringValue(Integer value, String att) {
+    public static String getStringValue(Integer value, String att) {
         String stringValue = null;
 
         switch (att) {

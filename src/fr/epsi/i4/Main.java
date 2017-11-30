@@ -1,10 +1,15 @@
 package fr.epsi.i4;
 
+import fr.epsi.i4.model.Branch;
 import fr.epsi.i4.model.Entry;
 import fr.epsi.i4.model.Node;
 
-public class Main {
+import java.util.Scanner;
 
+import static fr.epsi.i4.model.Node.getStringValue;
+
+public class Main {
+  
 	public static void main(String[] args) {
 		long time = System.currentTimeMillis();
 
@@ -21,6 +26,26 @@ public class Main {
 
 		System.out.println("Programme exécuté en " + time / 1000f + " secondes");
 	}
+  
+  public static void decide(Node root) {
+        Node current = root;
+        Scanner input = new Scanner(System.in);
+        System.out.println("Est-ce qu'on sort?");
+        System.out.println(root.getValue());
+        while (current.getChildren().size() > 0) {
+            for (Branch child : current.getChildren()) {
+                System.out.print(getStringValue(Integer.valueOf(child.getValue()), current.getValue()) + "(" + child.getValue() + ") ");
+            }
+            System.out.println("");
+            int i = input.nextInt();
+            for (Branch child : current.getChildren()) {
+                if (Integer.valueOf(child.getValue()).equals(i)) {
+                    current = child.getChild();
+                    System.out.println(child.getChild().getValue());
+                }
+            }
+        }
+    }
 
 	public static void generateData(Node root) {
 		root.addEntry(new Entry(0, 0, 0, 0, 0));
