@@ -241,7 +241,12 @@ public class Node {
 		return "Non";
 	}
 
-	public Node generateTree() {
+	public void regenerateTree() {
+		setChildren(new ArrayList<>());
+		generateTree();
+	}
+
+	public void generateTree() {
 		String plusPertinent = getPlusPertinent();
 		if (plusPertinent != null) {
 			setValue(plusPertinent);
@@ -253,7 +258,6 @@ public class Node {
 		} else {
 			setValue(getOuiNon());
 		}
-		return this;
 	}
 
 	public String getStringValue(Integer value, String att) {
@@ -352,6 +356,59 @@ public class Node {
 					child.getChild().decide();
 				}
 			}
+		}
+	}
+
+	public void decide(Entry entry, Node root) {
+		if (getChildren().size() == 0) {
+			System.out.println(getValue());
+			acceptOrRefuse(entry, root);
+		} else {
+			Field field = null;
+			try {
+				boolean trouve = false;
+				field = Entry.class.getField(getValue());
+				for (Branch child : getChildren()) {
+					if (Integer.valueOf(child.getValue()).equals(field.get(entry))) {
+						child.getChild().decide(entry, root);
+						trouve = true;
+					}
+				}
+				if (!trouve) {
+					System.out.println("Nouveau paramètre! " + field.get(entry));
+					root.addEntry(entry.clone(0));
+					root.addEntry(entry.clone(1));
+					root.regenerateTree();
+					root.decide(entry, root);
+				}
+			} catch (Exception e) {
+				System.out.println("decide: " + e);
+			}
+		}
+	}
+
+	public void acceptOrRefuse(Entry entry, Node root) {
+		Scanner input = new Scanner(System.in);
+		System.out.println("Acceptez-vous la décision? [o/n]");
+		String choice = input.next();
+
+		if (choice.equals("o")) {
+			System.out.println("Choix accepté, génial!");
+			if (getValue().toLowerCase().equals("oui")) {
+				entry.setJouer(1);
+			} else {
+				entry.setJouer(0);
+			}
+			root.addEntry(entry);
+		} else {
+			System.out.println("Choix refusé, regénération");
+			if (getValue().toLowerCase().equals("oui")) {
+				entry.setJouer(0);
+			} else {
+				entry.setJouer(1);
+			}
+			root.addEntry(entry);
+			root.regenerateTree();
 		}
 	}
 }

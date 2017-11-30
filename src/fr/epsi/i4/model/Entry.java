@@ -67,4 +67,12 @@ public class Entry {
     public void setJouer(Integer jouer) {
         this.jouer = jouer;
     }
+
+    public Entry clone() {
+        return clone(jouer);
+    }
+
+    public Entry clone(Integer jouer) {
+        return new Entry(ciel, temperature, humidite, vent, jouer);
+    }
 }
