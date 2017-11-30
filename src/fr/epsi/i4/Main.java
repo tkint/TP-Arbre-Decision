@@ -25,6 +25,8 @@ public class Main {
 		time = System.currentTimeMillis() - time;
 
 		System.out.println("Programme exécuté en " + time / 1000f + " secondes");
+
+		decide(root);
 	}
   
   public static void decide(Node root) {
