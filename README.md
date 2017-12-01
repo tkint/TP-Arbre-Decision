@@ -26,3 +26,9 @@
   * La taille maximum de data
 * Au lancement du programme, on charge les données
 * A la modification de data, on sauvegarde les données
+
+#### Récupération des données depuis le fichier:
+* Fichier texte
+  * Boucler sur le fichier plutot que sur la liste de data
+  * Plus besoin de liste de data
+  * Pour chaque ligne on créer une Entry, on la traite puis on passe à la ligne suivante
