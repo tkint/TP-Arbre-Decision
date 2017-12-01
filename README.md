@@ -27,8 +27,27 @@
 * Au lancement du programme, on charge les données
 * A la modification de data, on sauvegarde les données
 
+
 #### Récupération des données depuis le fichier:
 * Fichier texte
   * Boucler sur le fichier plutot que sur la liste de data
   * Plus besoin de liste de data
   * Pour chaque ligne on créer une Entry, on la traite puis on passe à la ligne suivante
+
+#### Accès aux données :
+* Accéder directement sur le fichier texte et non plus sur la liste d'entry
+* Boucler sur le fichier texte dans les algos
+
+#### Généricité
+* Dans Node:
+  * Créer un HashMap<String, HashMap<Integer, String>> references
+    * Correspond à l'ensemble des données uniques avec leur correspondance en français
+    * Remplir ce HashMap à l'ajout d'une Entry dans addEntry
+  * getStringValue doit maintenant récupérer la valeur depuis references
+  * getUniqueValues est inutile ou doit être modifié
+* Dans Entry
+  * Créer un HashMap<String, Integer> values
+    * Correspond à l'ensemble des données d'une Entry
+    * Résultat:
+      * Dernière donnée du HashMap?
+      * Champ à part de type boolean
