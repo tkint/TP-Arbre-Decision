@@ -1,6 +1,13 @@
+<<<<<<< HEAD
 .idea/
 nbproject/
 out/
 
 /nbproject/private/
 /build/
+=======
+.idea/
+out/
+nbproject/
+build/
+>>>>>>> Added things in .gitignore
