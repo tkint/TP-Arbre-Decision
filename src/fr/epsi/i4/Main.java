@@ -2,6 +2,9 @@ package fr.epsi.i4;
 
 import fr.epsi.i4.model.Entry;
 import fr.epsi.i4.model.Node;
+import javafx.util.Pair;
+
+import java.util.HashMap;
 
 public class Main {
 
@@ -12,7 +15,11 @@ public class Main {
 
 		//		generateData(tree);
 
-		generateRandomData(tree, 1000000000);
+//		generateRandomData(tree, 1000000000);
+
+		HashMap<String, Pair<Integer, String>> entry = new HashMap<>();
+		Pair<Integer, String> keyValue = new Pair<>(0, "Soleil");
+
 
 		tree.generateTree();
 		tree.print();

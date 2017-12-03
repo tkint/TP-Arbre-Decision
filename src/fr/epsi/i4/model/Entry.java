@@ -1,11 +1,16 @@
 package fr.epsi.i4.model;
 
-import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by tkint on 23/11/2017.
  */
 public class Entry {
+
+    private List<Integer> values;
+
+    private boolean result;
 
     // 0, 1, 2
 
@@ -19,6 +24,11 @@ public class Entry {
     public Integer vent;
     // NON, OUI
     public Integer jouer;
+
+    public Entry(List<Integer> values, boolean result) {
+        this.values = values;
+        this.result = result;
+    }
 
     public Entry(Integer ciel, Integer temperature, Integer humidite, Integer vent, Integer jouer) {
         this.ciel = ciel;
