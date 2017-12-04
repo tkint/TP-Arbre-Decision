@@ -5,6 +5,7 @@ import static fr.epsi.i4.utils.ConsoleColors.GREEN;
 import static fr.epsi.i4.utils.ConsoleColors.RED;
 import static fr.epsi.i4.utils.ConsoleColors.RESET;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -40,10 +41,13 @@ public class Node {
 		for (Entry entry : parent.data) {
 			if (entry.getValues().get(att).equals(valueToKeep)) {
 				this.data.add(entry);
+				for (Map.Entry<String, Integer> e : entry.getValues().entrySet()) {
+					addReference(new AbstractMap.SimpleEntry<>(e.getKey(), new Pair<>(e.getValue(), parent.references
+							.get(e.getKey())
+							.get(e.getValue()))));
+				}
 			}
 		}
-
-		this.references = parent.references;
 	}
 
 	public String getValue() {
@@ -83,18 +87,23 @@ public class Node {
 		return branch;
 	}
 
+	public void addReference(Map.Entry<String, Pair<Integer, String>> entry) {
+		// Si le champ de reference n'existe pas
+		if (!references.containsKey(entry.getKey()) || references.get(entry.getKey()) == null) {
+			HashMap<Integer, String> keyValue = new HashMap();
+			keyValue.put(entry.getValue().getKey(), entry.getValue().getValue());
+			references.put(entry.getKey(), keyValue);
+			// Si la reference n'existe pas
+		} else if (!references.get(entry.getKey()).containsKey(entry.getValue().getKey()) || references.get(entry
+				.getKey()).get(entry.getValue().getKey()) == null) {
+			references.get(entry.getKey()).put(entry.getValue().getKey(), entry.getValue().getValue());
+		}
+	}
+
 	public Entry addEntry(boolean result, HashMap<String, Pair<Integer, String>> newEntry) {
 		HashMap<String, Integer> entryValues = new HashMap<>();
 		newEntry.forEach((key, value) -> {
-			// Si la reference est vide, il faut créer le HashMap et lui ajouter la nouvelle valeur
-			if (!references.containsKey(key) || references.get(key) == null) {
-				HashMap<Integer, String> keyValue = new HashMap();
-				keyValue.put(value.getKey(), value.getValue());
-				references.put(key, keyValue);
-			} else {
-				// Sinon, ajouter la nouvelle valeur
-				references.get(key).put(value.getKey(), value.getValue());
-			}
+			addReference(new AbstractMap.SimpleEntry<>(key, new Pair<>(value.getKey(), value.getValue())));
 			entryValues.put(key, value.getKey());
 		});
 
@@ -108,16 +117,7 @@ public class Node {
 		HashMap<String, Integer> entryValues = new HashMap<>();
 
 		for (Map.Entry<String, Pair<Integer, String>> entry : entryKeyValues) {
-			// Si le champ de reference n'existe pas
-			if (!references.containsKey(entry.getKey()) || references.get(entry.getKey()) == null) {
-				HashMap<Integer, String> keyValue = new HashMap();
-				keyValue.put(entry.getValue().getKey(), entry.getValue().getValue());
-				references.put(entry.getKey(), keyValue);
-				// Si la reference n'existe pas
-			} else if (!references.get(entry.getKey()).containsKey(entry.getValue().getKey()) || references.get(entry
-					.getKey()).get(entry.getValue().getKey()) == null) {
-				references.get(entry.getKey()).put(entry.getValue().getKey(), entry.getValue().getValue());
-			}
+			addReference(entry);
 			entryValues.put(entry.getKey(), entry.getValue().getKey());
 		}
 
@@ -187,6 +187,7 @@ public class Node {
 
 	public String getPlusPertinent() {
 		String fieldPlusPertinent = null;
+
 		Double pertinence = 0d;
 		Double p;
 

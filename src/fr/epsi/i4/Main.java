@@ -12,9 +12,11 @@ public class Main {
 
 		Node tree = new Node();
 
-		generateData(tree);
+		// generateData(tree);
 
-		affiche(tree);
+		generateRandomData(tree, 10000000);
+
+		// affiche(tree);
 
 		tree.generateTree();
 		tree.print();
@@ -104,11 +106,18 @@ public class Main {
 	}
 
 	public static void generateRandomData(Node tree, int quantity) {
-		// for (int i = 0; i < quantity; i++) {
-		// Entry entry =
-		// new Entry(randomInt(0, 2), randomInt(0, 2), randomInt(0, 1), randomInt(0, 1), randomInt(0, 1));
-		// tree.addEntry(entry);
-		// }
+		for (int i = 0; i < quantity; i++) {
+			tree.addEntry((randomInt(0, 1) == 1 ? true : false), new AbstractMap.SimpleEntry<>("ciel", randomValue(0,
+					2)), new AbstractMap.SimpleEntry<>("temperature", randomValue(0, 2)),
+					new AbstractMap.SimpleEntry<>("humidite", randomValue(0, 1)),
+					new AbstractMap.SimpleEntry<>("vent", randomValue(0, 1)));
+		}
+	}
+
+	public static Pair<Integer, String> randomValue(int min, int max) {
+		Integer r = randomInt(min, max);
+
+		return new Pair<>(r, "Random - " + r);
 	}
 
 	public static int randomInt(int min, int max) {
