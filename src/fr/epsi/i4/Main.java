@@ -10,8 +10,8 @@ public class Main {
 
         Node tree = new Node();
 
-        generateData(tree);
-//        generateRandomData(tree, 1000000);
+//        generateData(tree);
+        generateRandomData(tree, 1000000);
         tree.generateTree();
         tree.print();
 
@@ -19,8 +19,17 @@ public class Main {
 
         System.out.println("Programme exécuté en " + time / 1000f + " secondes");
 
-        //		tree.decide();
-        		tree.decide(new Entry(1, 3, 6, 8, 1), tree);
+        		tree.decide();
+//        tree.addAttribut("Lune", "Pleine");
+//        Entry test = new Entry(1, 3, 6, 8, 1);
+//        test.getParams().add(tree.getIndexOfValue("Pleine"));
+//        tree.decide(test, tree);
+        
+        tree.addValueToAttribut("Vent", "Inexistant");
+        Entry test = new Entry(1, 3, 6, tree.getIndexOfValue("Inexistant"), 1);
+//        tree.decide(test, tree);
+        
+//        tree.decide(new Entry(1, 3, 6, 8, 1), tree);
         //		tree.print();
     }
 

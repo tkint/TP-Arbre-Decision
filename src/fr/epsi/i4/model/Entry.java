@@ -26,6 +26,10 @@ public class Entry {
     
     private List<Integer> params;
 
+    public Entry() {
+        params = new ArrayList<>();
+    }
+    
     public Entry(Integer ciel, Integer temperature, Integer humidite, Integer vent, Integer jouer) {
         this.ciel = ciel;
         this.temperature = temperature;
@@ -113,5 +117,8 @@ public class Entry {
         this.params = params;
     }
     
+    public void addParam(Integer param){
+        params.add(param);
+    }
     
 }
