@@ -37,11 +37,11 @@ public class Node {
         this.children = new ArrayList<>();
         this.data = new ArrayList<>();
     }
-    
+
     public Node(Integer valueToKeep, Integer att, List<Entry> data) {
         this();
         for (Entry entry : data) {
-            if (entry.getParams().get(att) == valueToKeep) {
+            if (entry.getParams().size() > att && entry.getParams().get(att) == valueToKeep) {
                 addEntry(entry);
             }
         }
@@ -77,12 +77,14 @@ public class Node {
         }
         return entry;
     }
-    
+
     public double entropie(int value, Integer att) {
         double pOui = 0;
         double pNon = 0;
         for (Entry entry : data) {
-            if (entry.getParams().get(att) == value) {
+            if (entry.getParams().size() < att + 1) {
+                return 0d;
+            } else if (entry.getParams().get(att) == value) {
                 if (!entry.isResult()) {
                     pNon++;
                 } else {
@@ -101,8 +103,7 @@ public class Node {
         return -pOui * log2(pOui) - pNon * log2(pNon);
     }
 
-    
-    public double entropie2() {
+    public double entropie() {
         double pOui = 0;
         double pNon = 0;
 
@@ -129,16 +130,15 @@ public class Node {
         }
         return Math.log(x) / Math.log(2.);
     }
-    
+
     public Double pertinence(Integer att) {
-        Double total = entropie2();
+        Double total = entropie();
         for (int v : getUniqueValues(att)) {
             total -= partPertinence(v, att);
         }
         return total;
     }
 
-    
     private double partPertinence(int value, Integer att) {
         return getRatio(value, att) * entropie(value, att);
     }
@@ -147,13 +147,15 @@ public class Node {
         double nb = 0d;
 
         for (Entry entry : data) {
-            if (entry.getParams().get(att) == value) {
+            if (entry.getParams().size() < att + 1) {
+                return 0d;
+            } else if (entry.getParams().get(att) == value) {
                 nb++;
             }
         }
-        
-        if(data.size() == 0){
-            return 0;
+
+        if (data.size() == 0) {
+            return 0d;
         }
         return nb / data.size();
     }
@@ -169,7 +171,7 @@ public class Node {
         return uniqueValues;
     }
 
-    public Integer getPlusPertinent2() {
+    public Integer getPlusPertinent() {
         Double pertinence = 0d;
         Integer fieldPlusPertinent = -1;
         for (int i = 0; i < attributs.size(); i++) {
@@ -211,7 +213,7 @@ public class Node {
     }
 
     public void generateTree() {
-        Integer plusPertinent = getPlusPertinent2();
+        Integer plusPertinent = getPlusPertinent();
         if (plusPertinent != null) {
             int index = 0;
             String key = "";
@@ -242,7 +244,7 @@ public class Node {
     public void print() {
         print("#", true, "");
     }
-    
+
     private void print(String prefix, boolean isTail, String branchValue) {
         boolean ouiNon = value.toLowerCase().equals("oui") || value.toLowerCase().equals("non");
         String txt = prefix;
@@ -267,24 +269,51 @@ public class Node {
 
     public void decide() {
         Scanner input = new Scanner(System.in);
-        
+
         Iterator<String> itr;
         itr = attributs.keySet().iterator();
         String att = "";
         Entry entry = new Entry();
-        while(itr.hasNext()) {
+        while (itr.hasNext()) {
             att = itr.next();
             System.out.println("Selectionnez le paramètre " + att);
-            for (Integer i : attributs.get(att)){
+            for (Integer i : attributs.get(att)) {
                 System.out.println(getStringValue(i) + " - " + i);
             }
-            int inputValue = -1;
-            while (!attributs.get(att).contains(inputValue)){
-                System.out.println("Saisissez une valeur existante");
-                inputValue = input.nextInt();
+            String inputValue = "-1";
+            while (!inputValue.equals("new") && !attributs.get(att).contains(Integer.valueOf(inputValue))) {
+                System.out.println("Saisissez une valeur existante ou 'new' pour ajouter une valuer");
+                inputValue = input.nextLine();
             }
-            entry.addParam(inputValue);
+            if (inputValue.equals("new")) {
+                while (inputValue.equals("new")) {
+                    System.out.print("Value : ");
+                    inputValue = input.nextLine();
+                }
+                addValueToAttribut(att, inputValue);
+                entry.addParam(getIndexOfValue(inputValue));
+            } else {
+                entry.addParam(Integer.valueOf(inputValue));
+            }
         }
+
+        System.out.println("Saississez 'new' pour saisir un nouvel attribut");
+        String inputValue = input.nextLine();
+        String attribut = "";
+        while (inputValue.equals("new")) {
+            System.out.print("New attribut : ");
+            attribut = input.nextLine();
+
+            while (inputValue.equals("new")) {
+                System.out.print("Value : ");
+                inputValue = input.nextLine();
+            }
+            addAttribut(attribut, inputValue);
+            entry.addParam(getIndexOfValue(inputValue));
+
+            System.out.println("L'attribut à été créé");
+        }
+
         System.out.println(entry.getParams().toString());
         decide(entry, this);
     }
@@ -296,7 +325,7 @@ public class Node {
         } else {
             boolean trouve = false;
             for (Branch child : getChildren()) {
-                if(entry.getParams().contains(Integer.valueOf(child.getValue()))){
+                if (entry.getParams().contains(Integer.valueOf(child.getValue()))) {
                     child.getChild().decide(entry, root);
                     trouve = true;
                 }
@@ -308,7 +337,7 @@ public class Node {
                 root.addEntry(cloneTrue);
                 root.addEntry(cloneFalse);
                 root.regenerateTree();
-                print();
+                root.print();
                 root.decide(entry, root);
             }
         }
@@ -336,7 +365,7 @@ public class Node {
             }
             root.addEntry(entry);
             root.regenerateTree();
-            print();
+            root.print();
         }
     }
 
@@ -349,7 +378,7 @@ public class Node {
         }
         return null;
     }
-    
+
     public Integer getIndexOfValue(String att) {
         return values.indexOf(att);
     }

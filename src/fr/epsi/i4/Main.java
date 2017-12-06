@@ -10,14 +10,14 @@ public class Main {
 
         Node tree = new Node();
 
-//        generateData(tree);
-        generateRandomData(tree, 1000000);
+        generateData(tree);
+//        generateRandomData(tree, 1000000);
         tree.generateTree();
         tree.print();
 
         time = System.currentTimeMillis() - time;
 
-        System.out.println("Programme exécuté en " + time / 1000f + " secondes");
+        System.out.println("Programme exÃ©cutÃ© en " + time / 1000f + " secondes");
 
         		tree.decide();
 //        tree.addAttribut("Lune", "Pleine");
@@ -25,8 +25,8 @@ public class Main {
 //        test.getParams().add(tree.getIndexOfValue("Pleine"));
 //        tree.decide(test, tree);
         
-        tree.addValueToAttribut("Vent", "Inexistant");
-        Entry test = new Entry(1, 3, 6, tree.getIndexOfValue("Inexistant"), 1);
+//        tree.addValueToAttribut("Vent", "Inexistant");
+//        Entry test = new Entry(1, 3, 6, tree.getIndexOfValue("Inexistant"), 1);
 //        tree.decide(test, tree);
         
 //        tree.decide(new Entry(1, 3, 6, 8, 1), tree);
@@ -42,8 +42,8 @@ public class Main {
         tree.addValueToAttribut("Temp", "Haute");
         tree.addValueToAttribut("Temp", "Pole Nord");
 
-        tree.addAttribut("Humidité", "Normale");
-        tree.addValueToAttribut("Humidité", "Eleve");
+        tree.addAttribut("HumiditÃ©", "Normale");
+        tree.addValueToAttribut("HumiditÃ©", "Eleve");
 
         tree.addAttribut("Vent", "Faible");
         tree.addValueToAttribut("Vent", "Fort");
@@ -73,8 +73,8 @@ public class Main {
         tree.addValueToAttribut("Temp", "Haute");
         tree.addValueToAttribut("Temp", "Pole Nord");
 
-        tree.addAttribut("Humidité", "Normale");
-        tree.addValueToAttribut("Humidité", "Eleve");
+        tree.addAttribut("HumiditÃ©", "Normale");
+        tree.addValueToAttribut("HumiditÃ©", "Eleve");
 
         tree.addAttribut("Vent", "Faible");
         tree.addValueToAttribut("Vent", "Fort");
@@ -107,7 +107,7 @@ public class Main {
 
         System.out.println("--------------------------------------------");
 
-        System.out.println(tree.getPlusPertinent2());
+        System.out.println(tree.getPlusPertinent());
 
         System.out.println("--------------------------------------------");
     }
