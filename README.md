@@ -51,3 +51,7 @@
     * Résultat:
       * Dernière donnée du HashMap?
       * Champ à part de type boolean
+
+#### Performances
+* master:
+  * Million: ~ 4 sec

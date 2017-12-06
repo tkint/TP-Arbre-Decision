@@ -12,7 +12,7 @@ public class Main {
 
 		//		generateData(tree);
 
-		generateRandomData(tree, 1000000000);
+		generateRandomData(tree, 1000000);
 
 		tree.generateTree();
 		tree.print();
