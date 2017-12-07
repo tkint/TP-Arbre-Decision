@@ -14,16 +14,8 @@ public class Main {
 
         Node tree = new Node();
 
-        generateData(tree);
-//        tree.writeValueToFile();
-//            tree.writeAttributToFile();
-//        try {
-//            tree.writeFile();
-//        } catch (FileNotFoundException ex) {
-//            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (UnsupportedEncodingException ex) {
-//            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+//        generateData(tree);
+
 tree.readFile();
 tree.readFileAttribut();
 tree.readFileValue();
