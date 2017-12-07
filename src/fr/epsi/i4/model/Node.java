@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by tkint on 23/11/2017.
@@ -49,7 +51,7 @@ public class Node {
     public Node(Integer valueToKeep, Integer att, List<Entry> data) {
         this();
         for (Entry entry : data) {
-            if (entry.getParams().size() > att && entry.getParams().get(att) == valueToKeep) {
+            if (entry.getParams().size() > att && entry.getParams().get(att).equals(valueToKeep)) {
                 addEntry(entry);
             }
         }
@@ -217,6 +219,13 @@ public class Node {
 
     public void regenerateTree() {
         setChildren(new ArrayList<>());
+        try {
+            writeFile();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
+        }
         generateTree();
     }
 
@@ -404,6 +413,8 @@ public class Node {
         valuesMap.add(id);
         attributs.put(att, valuesMap);
         id++;
+        writeAttributToFile();
+        writeValueToFile();
     }
 
     public void addValueToAttribut(String att, String val) {
@@ -411,6 +422,8 @@ public class Node {
         valuesMap.add(id);
         values.add(val);
         id++;
+        writeAttributToFile();
+        writeValueToFile();
     }
 
     public void writeFile() throws FileNotFoundException, UnsupportedEncodingException {
