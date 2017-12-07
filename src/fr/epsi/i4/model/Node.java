@@ -1,16 +1,24 @@
 package fr.epsi.i4.model;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 
 import static fr.epsi.i4.utils.ConsoleColors.BLUE;
 import static fr.epsi.i4.utils.ConsoleColors.GREEN;
 import static fr.epsi.i4.utils.ConsoleColors.RED;
 import static fr.epsi.i4.utils.ConsoleColors.RESET;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -403,5 +411,97 @@ public class Node {
         valuesMap.add(id);
         values.add(val);
         id++;
+    }
+
+    public void writeFile() throws FileNotFoundException, UnsupportedEncodingException {
+        PrintWriter writer = new PrintWriter("data.txt", "UTF-8");
+        for (Entry e : data) {
+            writer.println(e.toString());
+        }
+        writer.close();
+    }
+
+    public void writeFile(Entry e) throws FileNotFoundException, UnsupportedEncodingException {
+        PrintWriter writer = new PrintWriter("data.txt", "UTF-8");
+        writer.println(e.toString());
+        writer.close();
+    }
+
+    public void writeAttributToFile() {
+        try {
+            FileOutputStream fos = new FileOutputStream("attribut.ser");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(attributs);
+            oos.close();
+            fos.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+    
+    public void writeValueToFile() {
+        try {
+            FileOutputStream fos = new FileOutputStream("value.ser");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(values);
+            oos.close();
+            fos.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    public void readFileAttribut() {
+        try {
+            FileInputStream fis = new FileInputStream("attribut.ser");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            attributs = (LinkedHashMap) ois.readObject();
+            ois.close();
+            fis.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return;
+        } catch (ClassNotFoundException c) {
+            System.out.println("Class not found");
+            c.printStackTrace();
+            return;
+        }
+    }
+    
+    public void readFileValue() {
+        try {
+            FileInputStream fis = new FileInputStream("value.ser");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            values = (List) ois.readObject();
+            ois.close();
+            fis.close();
+            id = values.size();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return;
+        } catch (ClassNotFoundException c) {
+            System.out.println("Class not found");
+            c.printStackTrace();
+            return;
+        }
+    }
+
+    public void readFile() {
+        List<Entry> dataTemp = data;
+        try {
+            File f = new File("data.txt");
+            BufferedReader b = new BufferedReader(new FileReader(f));
+            String readLine = "";
+            data = new ArrayList<>();
+            while ((readLine = b.readLine()) != null) {
+                Entry entry = new Entry();
+                entry.StringToObject(readLine);
+                this.data.add(entry);
+            }
+
+        } catch (IOException e) {
+            data = dataTemp;
+            System.out.println("Aucune données");
+        }
     }
 }

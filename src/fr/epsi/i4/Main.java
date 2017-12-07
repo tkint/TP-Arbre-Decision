@@ -2,6 +2,10 @@ package fr.epsi.i4;
 
 import fr.epsi.i4.model.Entry;
 import fr.epsi.i4.model.Node;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main {
 
@@ -11,6 +15,18 @@ public class Main {
         Node tree = new Node();
 
         generateData(tree);
+//        tree.writeValueToFile();
+//            tree.writeAttributToFile();
+//        try {
+//            tree.writeFile();
+//        } catch (FileNotFoundException ex) {
+//            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (UnsupportedEncodingException ex) {
+//            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+tree.readFile();
+tree.readFileAttribut();
+tree.readFileValue();
 //        generateRandomData(tree, 1000000);
         tree.generateTree();
         tree.print();

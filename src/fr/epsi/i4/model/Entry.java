@@ -121,4 +121,27 @@ public class Entry {
         params.add(param);
     }
     
+    public void StringToObject(String readLine){
+        String[] atts = readLine.split(",");
+        for (int i = 0; i < atts.length - 1; i++){
+            params.add(Integer.valueOf(atts[i]));
+        }
+        if (atts[atts.length - 1].equals("false")){
+            result = false;
+        } else {
+            result = true;
+        }
+    }
+
+    @Override
+    public String toString() {
+        String s ="";
+        for(Integer i : params){
+            s +=  i + ",";
+        }
+        s += result;
+        return s;
+    }
+    
+    
 }
