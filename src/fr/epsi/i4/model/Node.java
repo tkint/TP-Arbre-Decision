@@ -284,6 +284,13 @@ public class Node {
             while (!inputValue.equals("new") && !attributs.get(att).contains(Integer.valueOf(inputValue))) {
                 System.out.println("Saisissez une valeur existante ou 'new' pour ajouter une valuer");
                 inputValue = input.nextLine();
+                if (!inputValue.equals("new")) {
+                    try {
+                        Integer.valueOf(inputValue);
+                    } catch (NumberFormatException e) {
+                        inputValue = String.valueOf(getIndexOfValue(inputValue));
+                    }
+                }
             }
             if (inputValue.equals("new")) {
                 while (inputValue.equals("new")) {
