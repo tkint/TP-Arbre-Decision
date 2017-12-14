@@ -19,7 +19,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -286,6 +285,24 @@ public class Node {
 
     public void decide() {
         Scanner input = new Scanner(System.in);
+        System.out.println(getValue());
+        if (getChildren().size() > 0) {
+            for (Branch child : getChildren()) {
+                System.out.print(getStringValue(Integer.valueOf(child.getValue())));
+                System.out.print("(" + child.getValue() + ") ");
+            }
+            System.out.println("");
+            int i = input.nextInt();
+            for (Branch child : getChildren()) {
+                if (Integer.valueOf(child.getValue()).equals(i)) {
+                    child.getChild().decide();
+                }
+            }
+        }
+    }
+
+    public void decideux() {
+        Scanner input = new Scanner(System.in);
 
         Iterator<String> itr;
         itr = attributs.keySet().iterator();
@@ -339,10 +356,10 @@ public class Node {
         }
 
         System.out.println(entry.getParams().toString());
-        decide(entry, this);
+        decideux(entry, this);
     }
 
-    public void decide(Entry entry, Node root) {
+    public void decideux(Entry entry, Node root) {
         if (getChildren().size() == 0) {
             System.out.println(getValue());
             acceptOrRefuse(entry, root);
@@ -350,7 +367,7 @@ public class Node {
             boolean trouve = false;
             for (Branch child : getChildren()) {
                 if (entry.getParams().contains(Integer.valueOf(child.getValue()))) {
-                    child.getChild().decide(entry, root);
+                    child.getChild().decideux(entry, root);
                     trouve = true;
                 }
             }
@@ -362,7 +379,7 @@ public class Node {
                 root.addEntry(cloneFalse);
                 root.regenerateTree();
                 root.print();
-                root.decide(entry, root);
+                root.decideux(entry, root);
             }
         }
     }
