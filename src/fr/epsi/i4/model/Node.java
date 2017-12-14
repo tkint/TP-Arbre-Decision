@@ -299,7 +299,7 @@ public class Node {
             }
             String inputValue = "-1";
             while (!inputValue.equals("new") && !attributs.get(att).contains(Integer.valueOf(inputValue))) {
-                System.out.println("Saisissez une valeur existante ou 'new' pour ajouter une valuer");
+                System.out.println("Saisissez une valeur existante ou 'new' pour ajouter une value");
                 inputValue = input.nextLine();
                 if (!inputValue.equals("new")) {
                     try {
@@ -321,7 +321,7 @@ public class Node {
             }
         }
 
-        System.out.println("Saississez 'new' pour saisir un nouvel attribut");
+        System.out.println("Tapez sur entrée pour finir ou saississez 'new' pour saisir un nouvel attribut");
         String inputValue = input.nextLine();
         String attribut = "";
         while (inputValue.equals("new")) {
