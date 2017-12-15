@@ -1,29 +1,9 @@
 package fr.epsi.i4.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
-import static fr.epsi.i4.utils.ConsoleColors.BLUE;
-import static fr.epsi.i4.utils.ConsoleColors.GREEN;
-import static fr.epsi.i4.utils.ConsoleColors.RED;
-import static fr.epsi.i4.utils.ConsoleColors.RESET;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import static fr.epsi.i4.utils.ConsoleColors.*;
 
 /**
  * Created by tkint on 23/11/2017.
@@ -218,13 +198,7 @@ public class Node {
 
     public void regenerateTree() {
         setChildren(new ArrayList<>());
-        try {
-            writeFile();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        writeFile();
         generateTree();
     }
 
@@ -396,7 +370,6 @@ public class Node {
             } else {
                 entry.setResult(false);
             }
-            root.addEntry(entry);
         } else {
             System.out.println("Choix refusé, regénération");
             if (getValue().toLowerCase().equals("oui")) {
@@ -404,10 +377,10 @@ public class Node {
             } else {
                 entry.setResult(true);
             }
-            root.addEntry(entry);
-            root.regenerateTree();
-            root.print();
         }
+        root.addEntry(entry);
+        root.regenerateTree();
+        root.print();
     }
 
     public Integer getIndexOfAttribut(String att) {
@@ -443,18 +416,17 @@ public class Node {
         writeValueToFile();
     }
 
-    public void writeFile() throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter("data.txt", "UTF-8");
-        for (Entry e : data) {
-            writer.println(e.toString());
+    public void writeFile() {
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter("data.txt", "UTF-8");
+            for (Entry e : data) {
+                writer.println(e.toString());
+            }
+            writer.close();
+        } catch (Exception e) {
+            System.out.println("writeFile: " + e);
         }
-        writer.close();
-    }
-
-    public void writeFile(Entry e) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter("data.txt", "UTF-8");
-        writer.println(e.toString());
-        writer.close();
     }
 
     public void writeAttributToFile() {
@@ -468,7 +440,7 @@ public class Node {
             ioe.printStackTrace();
         }
     }
-    
+
     public void writeValueToFile() {
         try {
             FileOutputStream fos = new FileOutputStream("value.ser");
@@ -497,7 +469,7 @@ public class Node {
             return;
         }
     }
-    
+
     public void readFileValue() {
         try {
             FileInputStream fis = new FileInputStream("value.ser");

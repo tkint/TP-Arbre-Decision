@@ -3,17 +3,26 @@ package fr.epsi.i4;
 import fr.epsi.i4.model.Entry;
 import fr.epsi.i4.model.Node;
 
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
         long time = System.currentTimeMillis();
 
         Node tree = new Node();
 
+//        generateData(tree);
+//        generateRandomData(tree, 1000000);
+//        tree.writeFile();
+//        tree.writeAttributToFile();
+//        tree.writeValueToFile();
+
         tree.readFile();
         tree.readFileAttribut();
         tree.readFileValue();
-//        generateRandomData(tree, 1000000);
+
         tree.generateTree();
         tree.print();
 
@@ -21,7 +30,7 @@ public class Main {
 
         System.out.println("Programme exécuté en " + time / 1000f + " secondes");
 
-        tree.decide();
+        tree.decideux();
     }
 
     public static void generateData(Node tree) {
