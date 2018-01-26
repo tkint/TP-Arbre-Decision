@@ -89,51 +89,75 @@ public class Node {
     }
 
     public double entropie(int value, Integer att) {
-        double pOui = 0;
-        double pNon = 0;
+        int pGauche = 0;
+        int pHaut = 0;
+        int pDroite = 0;
+        int pBas = 0;
         for (Entry entry : data) {
-            if (entry.isResult()) {
-                if (entry.getParams().size() < att + 1) {
-                    return 0d;
-                } else if (entry.getParams().get(att) == value) {
-                    if (!entry.isResult()) {
-                        pNon++;
-                    } else {
-                        pOui++;
-                    }
+            if (entry.getParams().size() < att + 1) {
+                return 0d;
+            } else if (entry.getParams().get(att) == value) {
+                switch (entry.isResult()) {
+                    case 0:
+                        pGauche++;
+                        break;
+                    case 1:
+                        pHaut++;
+                        break;
+                    case 2:
+                        pDroite++;
+                        break;
+                    case 3:
+                        pBas++;
+                        break;
                 }
             }
         }
 
-        if (pOui == 0 || pNon == 0) {
+        if (pGauche == 0 || pHaut == 0 || pDroite == 0 || pBas == 0) {
             return 0d;
         }
 
-        pOui /= data.size();
-        pNon /= data.size();
+        pGauche /= data.size();
+        pHaut /= data.size();
+        pDroite /= data.size();
+        pBas /= data.size();
 
-        return -pOui * log2(pOui) - pNon * log2(pNon);
+        return -pGauche * log2(pGauche) - pHaut * log2(pHaut) - pDroite * log2(pDroite) - pBas * log2(pBas);
     }
 
     public double entropie() {
-        double pOui = 0;
-        double pNon = 0;
+        int pGauche = 0;
+        int pHaut = 0;
+        int pDroite = 0;
+        int pBas = 0;
 
         for (Entry entry : data) {
-            if (!entry.isResult()) {
-                pNon++;
-            } else {
-                pOui++;
+            switch (entry.getParams().get(entry.getParams().size() - 1)) {
+                case 10:
+                    pGauche++;
+                    break;
+                case 11:
+                    pHaut++;
+                    break;
+                case 12:
+                    pDroite++;
+                    break;
+                case 13:
+                    pBas++;
+                    break;
             }
         }
-        if (pOui == 0 || pNon == 0) {
+        if (pGauche == 0 || pHaut == 0 || pDroite == 0 || pBas == 0) {
             return 0d;
         }
 
-        pOui /= data.size();
-        pNon /= data.size();
+        pGauche /= data.size();
+        pHaut /= data.size();
+        pDroite /= data.size();
+        pBas /= data.size();
 
-        return -pOui * log2(pOui) - pNon * log2(pNon);
+        return -pGauche * log2(pGauche) - pHaut * log2(pHaut) - pDroite * log2(pDroite) - pBas * log2(pBas);
     }
 
     private double log2(double x) {
@@ -159,12 +183,10 @@ public class Node {
         double nb = 0d;
 
         for (Entry entry : data) {
-            if (entry.isResult()) {
-                if (entry.getParams().size() < att + 1) {
-                    return 0d;
-                } else if (entry.getParams().get(att) == value) {
-                    nb++;
-                }
+            if (entry.getParams().size() < att + 1) {
+                return 0d;
+            } else if (entry.getParams().get(att) == value) {
+                nb++;
             }
         }
 
@@ -204,34 +226,38 @@ public class Node {
     }
 
     public String getOuiNon() {
-        double pGauche = 0;
-        double pHaut = 0;
-        double pDroite = 0;
-        double pBas = 0;
+        int pGauche = 0;
+        int pHaut = 0;
+        int pDroite = 0;
+        int pBas = 0;
 
         for (Entry entry : data) {
-            switch(entry.getDirection()){
-                case 0: pGauche++;
+            switch (entry.getParams().get(entry.getParams().size() - 1)) {
+                case 10:
+                    pGauche++;
                     break;
-                case 1: pHaut++;
+                case 11:
+                    pHaut++;
                     break;
-                case 2: pDroite++;
+                case 12:
+                    pDroite++;
                     break;
-                case 3: pBas++;
+                case 13:
+                    pBas++;
                     break;
             }
         }
 
-        if((pGauche >= pDroite) && (pGauche >= pHaut) && (pGauche >= pBas)){
+        if ((pGauche >= pDroite) && (pGauche >= pHaut) && (pGauche >= pBas)) {
             return "Gauche";
         }
-        if((pDroite >= pGauche) && (pDroite >= pHaut) && (pDroite >= pBas)){
+        if ((pDroite >= pGauche) && (pDroite >= pHaut) && (pDroite >= pBas)) {
             return "Gauche";
         }
-        if((pHaut >= pDroite) && (pHaut >= pGauche) && (pHaut >= pBas)){
+        if ((pHaut >= pDroite) && (pHaut >= pGauche) && (pHaut >= pBas)) {
             return "Gauche";
         }
-        if((pBas >= pDroite) && (pBas >= pGauche) && (pBas >= pGauche)){
+        if ((pBas >= pDroite) && (pBas >= pGauche) && (pBas >= pGauche)) {
             return "Gauche";
         }
         return "c'est de la merdeeeee";
@@ -376,8 +402,10 @@ public class Node {
             }
             if (!trouve) {
                 System.out.println("Nouveau paramètre! "); //+ getStringValue(Integer.valueOf(getValue())));
-                Entry cloneTrue = new Entry(true, entry.getParams());
-                Entry cloneFalse = new Entry(false, entry.getParams());
+                Entry cloneTrue = new Entry(0, entry.getParams());
+                Entry cloneFalse = new Entry(1, entry.getParams());
+                Entry cloneTrois = new Entry(2, entry.getParams());
+                Entry cloneQuattre = new Entry(3, entry.getParams());
                 root.addEntry(cloneTrue);
                 root.addEntry(cloneFalse);
                 root.regenerateTree();
@@ -395,17 +423,17 @@ public class Node {
         if (choice.equals("o")) {
             System.out.println("Choix accepté, génial!");
             if (getValue().toLowerCase().equals("oui")) {
-                entry.setResult(true);
+                entry.setResult(0);
             } else {
-                entry.setResult(false);
+                entry.setResult(1);
             }
             root.addEntry(entry);
         } else {
             System.out.println("Choix refusé, regénération");
             if (getValue().toLowerCase().equals("oui")) {
-                entry.setResult(false);
+                entry.setResult(0);
             } else {
-                entry.setResult(true);
+                entry.setResult(1);
             }
             root.addEntry(entry);
             root.regenerateTree();

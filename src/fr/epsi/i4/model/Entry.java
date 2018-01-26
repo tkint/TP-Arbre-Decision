@@ -22,9 +22,7 @@ public class Entry {
     // NON, OUI
     public Integer jouer;
     
-    private boolean result;
-    
-    private int direction;
+    private int result;
     
     private List<Integer> params;
 
@@ -32,18 +30,12 @@ public class Entry {
         params = new ArrayList<>();
     }
     
-    public Entry(Integer ciel, Integer temperature, Integer humidite, Integer vent, Integer jouer, int direction) {
+    public Entry(Integer ciel, Integer temperature, Integer humidite, Integer vent, Integer jouer) {
         this.ciel = ciel;
         this.temperature = temperature;
         this.humidite = humidite;
         this.vent = vent;
-        this.jouer = jouer;
-        if(jouer == 0){
-           result = false; 
-        } else {
-            result = true;
-        }
-        this.direction = direction;
+        this.result = jouer;
         params = new ArrayList<>();
         params.add(ciel);
         params.add(temperature);
@@ -51,7 +43,7 @@ public class Entry {
         params.add(vent);
     }
 
-    public Entry(boolean result, List<Integer> params) {
+    public Entry(int result, List<Integer> params) {
         this.result = result;
         this.params = params;
     }
@@ -101,14 +93,14 @@ public class Entry {
     }
 
     public Entry clone(Integer jouer) {
-        return new Entry(ciel, temperature, humidite, vent, jouer, direction);
+        return new Entry(ciel, temperature, humidite, vent, jouer);
     }
 
-    public boolean isResult() {
+    public int isResult() {
         return result;
     }
 
-    public void setResult(boolean result) {
+    public void setResult(int result) {
         this.result = result;
     }
 
@@ -126,15 +118,10 @@ public class Entry {
     
     public void StringToObject(String readLine){
         String[] atts = readLine.split(",");
-        for (int i = 0; i < atts.length - 2; i++){
+        for (int i = 0; i < atts.length - 1; i++){
             params.add(Integer.valueOf(atts[i]));
         }
-        if (atts[atts.length - 2].equals("false")){
-            result = false;
-        } else {
-            result = true;
-        }
-        direction = Integer.valueOf(atts[atts.length - 1]);
+        result = Integer.valueOf(atts[atts.length - 1]);
     }
 
     @Override
@@ -144,15 +131,6 @@ public class Entry {
             s +=  i + ",";
         }
         s += result;
-        s += ", " +  direction;
         return s;
-    }
-
-    public int getDirection() {
-        return direction;
-    }
-
-    public void setDirection(int direction) {
-        this.direction = direction;
     }
 }

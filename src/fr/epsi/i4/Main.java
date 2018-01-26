@@ -19,6 +19,20 @@ public class Main {
 //        } catch (UnsupportedEncodingException ex) {
 //            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
 //        }
+//tree.addAttribut("Ciel", "Soleil");
+//        tree.addValueToAttribut("Ciel", "Couvert");
+//        tree.addValueToAttribut("Ciel", "Pluie");
+//
+//        tree.addAttribut("Temp", "Basse");
+//        tree.addValueToAttribut("Temp", "Haute");
+//        tree.addValueToAttribut("Temp", "Pole Nord");
+//
+//        tree.addAttribut("HumiditÃ©", "Normale");
+//        tree.addValueToAttribut("HumiditÃ©", "Eleve");
+//
+//        tree.addAttribut("Vent", "Faible");
+//        tree.addValueToAttribut("Vent", "Fort");
+
         tree.readFile();
         tree.readFileAttribut();
         tree.readFileValue();
