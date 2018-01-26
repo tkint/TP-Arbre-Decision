@@ -10,7 +10,6 @@ import java.util.List;
 public class Entry {
 
     // 0, 1, 2
-
     // SOLEIL, COUVERT, PLUIE
     public Integer ciel;
     // CHAUD, DOUX, FROID
@@ -21,21 +20,22 @@ public class Entry {
     public Integer vent;
     // NON, OUI
     public Integer jouer;
-    
+
     private int result;
-    
+
     private List<Integer> params;
 
     public Entry() {
         params = new ArrayList<>();
     }
-    
+
     public Entry(Integer ciel, Integer temperature, Integer humidite, Integer vent, Integer jouer) {
         this.ciel = ciel;
         this.temperature = temperature;
         this.humidite = humidite;
         this.vent = vent;
         this.result = jouer;
+
         params = new ArrayList<>();
         params.add(ciel);
         params.add(temperature);
@@ -111,14 +111,14 @@ public class Entry {
     public void setParams(List<Integer> params) {
         this.params = params;
     }
-    
-    public void addParam(Integer param){
+
+    public void addParam(Integer param) {
         params.add(param);
     }
-    
-    public void StringToObject(String readLine){
+
+    public void StringToObject(String readLine) {
         String[] atts = readLine.split(",");
-        for (int i = 0; i < atts.length - 1; i++){
+        for (int i = 0; i < atts.length - 1; i++) {
             params.add(Integer.valueOf(atts[i]));
         }
         result = Integer.valueOf(atts[atts.length - 1]);
@@ -126,11 +126,12 @@ public class Entry {
 
     @Override
     public String toString() {
-        String s ="";
-        for(Integer i : params){
-            s +=  i + ",";
+        String s = "";
+        for (Integer i : params) {
+            s += i + ",";
         }
         s += result;
         return s;
     }
+
 }

@@ -89,49 +89,77 @@ public class Node {
     }
 
     public double entropie(int value, Integer att) {
-        double pOui = 0;
-        double pNon = 0;
+        double pG = 0;
+        double pH = 0;
+        double pD = 0;
+        double pB = 0;
+
         for (Entry entry : data) {
             if (entry.getParams().size() < att + 1) {
                 return 0d;
             } else if (entry.getParams().get(att) == value) {
-                if (!entry.isResult()) {
-                    pNon++;
-                } else {
-                    pOui++;
+                switch (entry.isResult()) {
+                    case 0:
+                        pG++;
+                        break;
+                    case 1:
+                        pH++;
+                        break;
+                    case 2:
+                        pD++;
+                        break;
+                    case 3:
+                        pB++;
+                        break;
                 }
             }
         }
 
-        if (pOui == 0 || pNon == 0) {
-            return 0d;
-        }
+//        if (pOui == 0 || pNon == 0) {
+//            return 0d;
+//        }
+        pG /= data.size();
+        pH /= data.size();
+        pD /= data.size();
+        pB /= data.size();
 
-        pOui /= data.size();
-        pNon /= data.size();
-
-        return -pOui * log2(pOui) - pNon * log2(pNon);
+//        return -pOui * log2(pOui) - pNon * log2(pNon);
+        return -pG * log2(pG) - pH * log2(pH) - pD * log2(pD) - pB * log2(pB);
     }
 
     public double entropie() {
-        double pOui = 0;
-        double pNon = 0;
+        double pG = 0;
+        double pH = 0;
+        double pD = 0;
+        double pB = 0;
 
         for (Entry entry : data) {
-            if (!entry.isResult()) {
-                pNon++;
-            } else {
-                pOui++;
+            switch (entry.isResult()) {
+                case 0:
+                    pG++;
+                    break;
+                case 1:
+                    pH++;
+                    break;
+                case 2:
+                    pD++;
+                    break;
+                case 3:
+                    pB++;
+                    break;
             }
         }
-        if (pOui == 0 || pNon == 0) {
-            return 0d;
-        }
+//        if (pOui == 0 || pNon == 0) {
+//            return 0d;
+//        }
 
-        pOui /= data.size();
-        pNon /= data.size();
+        pG /= data.size();
+        pH /= data.size();
+        pD /= data.size();
+        pB /= data.size();
 
-        return -pOui * log2(pOui) - pNon * log2(pNon);
+//        return -pOui * log2(pOui) - pNon * log2(pNon);
+        return -pG * log2(pG) - pH * log2(pH) - pD * log2(pD) - pB * log2(pB);
     }
 
     private double log2(double x) {
@@ -200,21 +228,41 @@ public class Node {
     }
 
     public String getOuiNon() {
-        double pOui = 0;
-        double pNon = 0;
+        double pG = 0;
+        double pH = 0;
+        double pD = 0;
+        double pB = 0;
 
         for (Entry entry : data) {
-            if (!entry.isResult()) {
-                pNon++;
-            } else {
-                pOui++;
+            switch (entry.isResult()) {
+                case 0:
+                    pG++;
+                    break;
+                case 1:
+                    pH++;
+                    break;
+                case 2:
+                    pD++;
+                    break;
+                case 3:
+                    pB++;
+                    break;
             }
         }
 
-        if (pOui > pNon) {
-            return "Oui";
+        if (pG >= pH && pG >= pD && pG >= pB) {
+            return "Gauche";
         }
-        return "Non";
+        if (pH >= pG && pH >= pD && pH >= pB) {
+            return "Haut";
+        }
+        if (pD >= pH && pD >= pG && pD >= pB) {
+            return "Droite";
+        }
+        if (pB >= pH && pB >= pD && pB >= pG) {
+            return "Bas";
+        }
+        return "Merde !!!";
     }
 
     public void regenerateTree() {
@@ -356,10 +404,10 @@ public class Node {
             }
             if (!trouve) {
                 System.out.println("Nouveau paramètre! "); //+ getStringValue(Integer.valueOf(getValue())));
-                Entry cloneTrue = new Entry(true, entry.getParams());
-                Entry cloneFalse = new Entry(false, entry.getParams());
-                root.addEntry(cloneTrue);
-                root.addEntry(cloneFalse);
+//                Entry cloneTrue = new Entry(true, entry.getParams());
+//                Entry cloneFalse = new Entry(false, entry.getParams());
+//                root.addEntry(cloneTrue);
+//                root.addEntry(cloneFalse);
                 root.regenerateTree();
                 root.print();
                 root.decide(entry, root);
@@ -375,17 +423,18 @@ public class Node {
         if (choice.equals("o")) {
             System.out.println("Choix accepté, génial!");
             if (getValue().toLowerCase().equals("oui")) {
-                entry.setResult(true);
+//                entry.setResult(true);
             } else {
-                entry.setResult(false);
+//                entry.setResult(false);
+//                entry.setResult(false);
             }
             root.addEntry(entry);
         } else {
             System.out.println("Choix refusé, regénération");
             if (getValue().toLowerCase().equals("oui")) {
-                entry.setResult(false);
+//                entry.setResult(false);
             } else {
-                entry.setResult(true);
+//                entry.setResult(true);
             }
             root.addEntry(entry);
             root.regenerateTree();
@@ -451,7 +500,7 @@ public class Node {
             ioe.printStackTrace();
         }
     }
-    
+
     public void writeValueToFile() {
         try {
             FileOutputStream fos = new FileOutputStream("value.ser");
@@ -480,7 +529,7 @@ public class Node {
             return;
         }
     }
-    
+
     public void readFileValue() {
         try {
             FileInputStream fis = new FileInputStream("value.ser");

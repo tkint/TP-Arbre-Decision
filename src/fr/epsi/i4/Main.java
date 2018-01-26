@@ -2,6 +2,10 @@ package fr.epsi.i4;
 
 import fr.epsi.i4.model.Entry;
 import fr.epsi.i4.model.Node;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main {
 
@@ -11,14 +15,14 @@ public class Main {
         Node tree = new Node();
 
 //        generateRandomData(tree, 1000000);
-//        generateData(tree);
-//        try {
-//            tree.writeFile();
-//        } catch (FileNotFoundException ex) {
-//            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (UnsupportedEncodingException ex) {
-//            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        generateData(tree);
+        try {
+            tree.writeFile();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
 //        tree.addAttribut("Ciel", "Soleil");
 //        tree.addValueToAttribut("Ciel", "Couvert");
 //        tree.addValueToAttribut("Ciel", "Pluie");
@@ -57,7 +61,7 @@ public class Main {
         //		tree.print();
     }
 
-//    public static void generateData(Node tree) {
+    public static void generateData(Node tree) {
 //        tree.addAttribut("Ciel", "Soleil");
 //        tree.addValueToAttribut("Ciel", "Couvert");
 //        tree.addValueToAttribut("Ciel", "Pluie");
@@ -72,21 +76,21 @@ public class Main {
 //        tree.addAttribut("Vent", "Faible");
 //        tree.addValueToAttribut("Vent", "Fort");
 //
-//        tree.addEntry(new Entry(0, 3, 6, 8, 0));
-//        tree.addEntry(new Entry(0, 3, 6, 9, 0));
-//        tree.addEntry(new Entry(1, 3, 6, 8, 1));
-//        tree.addEntry(new Entry(2, 4, 6, 8, 1));
-//        tree.addEntry(new Entry(2, 5, 7, 8, 1));
-//        tree.addEntry(new Entry(2, 5, 7, 9, 0));
-//        tree.addEntry(new Entry(1, 5, 7, 9, 1));
-//        tree.addEntry(new Entry(0, 4, 6, 8, 0));
-//        tree.addEntry(new Entry(0, 5, 7, 8, 1));
-//        tree.addEntry(new Entry(2, 4, 7, 8, 1));
-//        tree.addEntry(new Entry(0, 4, 7, 9, 1));
-//        tree.addEntry(new Entry(1, 4, 6, 9, 1));
-//        tree.addEntry(new Entry(1, 3, 7, 8, 1));
-//        tree.addEntry(new Entry(2, 4, 6, 9, 0));
-//    }
+        tree.addEntry(new Entry(0, 3, 6, 8, 0));
+        tree.addEntry(new Entry(0, 3, 6, 9, 0));
+        tree.addEntry(new Entry(1, 3, 6, 8, 1));
+        tree.addEntry(new Entry(2, 4, 6, 8, 1));
+        tree.addEntry(new Entry(2, 5, 7, 8, 1));
+        tree.addEntry(new Entry(2, 5, 7, 9, 0));
+        tree.addEntry(new Entry(1, 5, 7, 9, 1));
+        tree.addEntry(new Entry(0, 4, 6, 8, 0));
+        tree.addEntry(new Entry(0, 5, 7, 8, 1));
+        tree.addEntry(new Entry(2, 4, 7, 8, 1));
+        tree.addEntry(new Entry(0, 4, 7, 9, 1));
+        tree.addEntry(new Entry(1, 4, 6, 9, 1));
+        tree.addEntry(new Entry(1, 3, 7, 8, 1));
+        tree.addEntry(new Entry(2, 4, 6, 9, 0));
+    }
 //
 //    public static void generateRandomData(Node tree, int quantity) {
 //        tree.addAttribut("Ciel", "Soleil");
