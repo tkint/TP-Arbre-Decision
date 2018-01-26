@@ -89,75 +89,49 @@ public class Node {
     }
 
     public double entropie(int value, Integer att) {
-        int pGauche = 0;
-        int pHaut = 0;
-        int pDroite = 0;
-        int pBas = 0;
+        double pOui = 0;
+        double pNon = 0;
         for (Entry entry : data) {
             if (entry.getParams().size() < att + 1) {
                 return 0d;
             } else if (entry.getParams().get(att) == value) {
-                switch (entry.isResult()) {
-                    case 0:
-                        pGauche++;
-                        break;
-                    case 1:
-                        pHaut++;
-                        break;
-                    case 2:
-                        pDroite++;
-                        break;
-                    case 3:
-                        pBas++;
-                        break;
+                if (!entry.isResult()) {
+                    pNon++;
+                } else {
+                    pOui++;
                 }
             }
         }
 
-        if (pGauche == 0 || pHaut == 0 || pDroite == 0 || pBas == 0) {
+        if (pOui == 0 || pNon == 0) {
             return 0d;
         }
 
-        pGauche /= data.size();
-        pHaut /= data.size();
-        pDroite /= data.size();
-        pBas /= data.size();
+        pOui /= data.size();
+        pNon /= data.size();
 
-        return -pGauche * log2(pGauche) - pHaut * log2(pHaut) - pDroite * log2(pDroite) - pBas * log2(pBas);
+        return -pOui * log2(pOui) - pNon * log2(pNon);
     }
 
     public double entropie() {
-        int pGauche = 0;
-        int pHaut = 0;
-        int pDroite = 0;
-        int pBas = 0;
+        double pOui = 0;
+        double pNon = 0;
 
         for (Entry entry : data) {
-            switch (entry.getParams().get(entry.getParams().size() - 1)) {
-                case 0:
-                    pGauche++;
-                    break;
-                case 1:
-                    pHaut++;
-                    break;
-                case 2:
-                    pDroite++;
-                    break;
-                case 3:
-                    pBas++;
-                    break;
+            if (!entry.isResult()) {
+                pNon++;
+            } else {
+                pOui++;
             }
         }
-        if (pGauche == 0 || pHaut == 0 || pDroite == 0 || pBas == 0) {
+        if (pOui == 0 || pNon == 0) {
             return 0d;
         }
 
-        pGauche /= data.size();
-        pHaut /= data.size();
-        pDroite /= data.size();
-        pBas /= data.size();
+        pOui /= data.size();
+        pNon /= data.size();
 
-        return -pGauche * log2(pGauche) - pHaut * log2(pHaut) - pDroite * log2(pDroite) - pBas * log2(pBas);
+        return -pOui * log2(pOui) - pNon * log2(pNon);
     }
 
     private double log2(double x) {
@@ -226,41 +200,21 @@ public class Node {
     }
 
     public String getOuiNon() {
-        int pGauche = 0;
-        int pHaut = 0;
-        int pDroite = 0;
-        int pBas = 0;
+        double pOui = 0;
+        double pNon = 0;
 
         for (Entry entry : data) {
-            switch (entry.getParams().get(entry.getParams().size() - 1)) {
-                case 0:
-                    pGauche++;
-                    break;
-                case 1:
-                    pHaut++;
-                    break;
-                case 2:
-                    pDroite++;
-                    break;
-                case 3:
-                    pBas++;
-                    break;
+            if (!entry.isResult()) {
+                pNon++;
+            } else {
+                pOui++;
             }
         }
 
-        if ((pGauche >= pDroite) && (pGauche >= pHaut) && (pGauche >= pBas)) {
-            return "Gauche";
+        if (pOui > pNon) {
+            return "Oui";
         }
-        if ((pDroite >= pGauche) && (pDroite >= pHaut) && (pDroite >= pBas)) {
-            return "Gauche";
-        }
-        if ((pHaut >= pDroite) && (pHaut >= pGauche) && (pHaut >= pBas)) {
-            return "Gauche";
-        }
-        if ((pBas >= pDroite) && (pBas >= pGauche) && (pBas >= pGauche)) {
-            return "Gauche";
-        }
-        return "c'est de la merdeeeee";
+        return "Non";
     }
 
     public void regenerateTree() {
@@ -402,10 +356,8 @@ public class Node {
             }
             if (!trouve) {
                 System.out.println("Nouveau paramètre! "); //+ getStringValue(Integer.valueOf(getValue())));
-                Entry cloneTrue = new Entry(0, entry.getParams());
-                Entry cloneFalse = new Entry(1, entry.getParams());
-                Entry cloneTrois = new Entry(2, entry.getParams());
-                Entry cloneQuattre = new Entry(3, entry.getParams());
+                Entry cloneTrue = new Entry(true, entry.getParams());
+                Entry cloneFalse = new Entry(false, entry.getParams());
                 root.addEntry(cloneTrue);
                 root.addEntry(cloneFalse);
                 root.regenerateTree();
@@ -423,17 +375,17 @@ public class Node {
         if (choice.equals("o")) {
             System.out.println("Choix accepté, génial!");
             if (getValue().toLowerCase().equals("oui")) {
-                entry.setResult(0);
+                entry.setResult(true);
             } else {
-                entry.setResult(1);
+                entry.setResult(false);
             }
             root.addEntry(entry);
         } else {
             System.out.println("Choix refusé, regénération");
             if (getValue().toLowerCase().equals("oui")) {
-                entry.setResult(0);
+                entry.setResult(false);
             } else {
-                entry.setResult(1);
+                entry.setResult(true);
             }
             root.addEntry(entry);
             root.regenerateTree();
@@ -499,7 +451,7 @@ public class Node {
             ioe.printStackTrace();
         }
     }
-
+    
     public void writeValueToFile() {
         try {
             FileOutputStream fos = new FileOutputStream("value.ser");
@@ -528,7 +480,7 @@ public class Node {
             return;
         }
     }
-
+    
     public void readFileValue() {
         try {
             FileInputStream fis = new FileInputStream("value.ser");
