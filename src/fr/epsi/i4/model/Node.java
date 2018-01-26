@@ -134,16 +134,16 @@ public class Node {
 
         for (Entry entry : data) {
             switch (entry.getParams().get(entry.getParams().size() - 1)) {
-                case 10:
+                case 0:
                     pGauche++;
                     break;
-                case 11:
+                case 1:
                     pHaut++;
                     break;
-                case 12:
+                case 2:
                     pDroite++;
                     break;
-                case 13:
+                case 3:
                     pBas++;
                     break;
             }
@@ -233,16 +233,16 @@ public class Node {
 
         for (Entry entry : data) {
             switch (entry.getParams().get(entry.getParams().size() - 1)) {
-                case 10:
+                case 0:
                     pGauche++;
                     break;
-                case 11:
+                case 1:
                     pHaut++;
                     break;
-                case 12:
+                case 2:
                     pDroite++;
                     break;
-                case 13:
+                case 3:
                     pBas++;
                     break;
             }
