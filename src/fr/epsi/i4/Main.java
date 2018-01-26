@@ -19,7 +19,7 @@ public class Main {
 //        } catch (UnsupportedEncodingException ex) {
 //            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-//tree.addAttribut("Ciel", "Soleil");
+//        tree.addAttribut("Ciel", "Soleil");
 //        tree.addValueToAttribut("Ciel", "Couvert");
 //        tree.addValueToAttribut("Ciel", "Pluie");
 //
