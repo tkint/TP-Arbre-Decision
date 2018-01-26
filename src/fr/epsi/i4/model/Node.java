@@ -92,13 +92,15 @@ public class Node {
         double pOui = 0;
         double pNon = 0;
         for (Entry entry : data) {
-            if (entry.getParams().size() < att + 1) {
-                return 0d;
-            } else if (entry.getParams().get(att) == value) {
-                if (!entry.isResult()) {
-                    pNon++;
-                } else {
-                    pOui++;
+            if (entry.isResult()) {
+                if (entry.getParams().size() < att + 1) {
+                    return 0d;
+                } else if (entry.getParams().get(att) == value) {
+                    if (!entry.isResult()) {
+                        pNon++;
+                    } else {
+                        pOui++;
+                    }
                 }
             }
         }
@@ -157,10 +159,12 @@ public class Node {
         double nb = 0d;
 
         for (Entry entry : data) {
-            if (entry.getParams().size() < att + 1) {
-                return 0d;
-            } else if (entry.getParams().get(att) == value) {
-                nb++;
+            if (entry.isResult()) {
+                if (entry.getParams().size() < att + 1) {
+                    return 0d;
+                } else if (entry.getParams().get(att) == value) {
+                    nb++;
+                }
             }
         }
 
@@ -200,21 +204,37 @@ public class Node {
     }
 
     public String getOuiNon() {
-        double pOui = 0;
-        double pNon = 0;
+        double pGauche = 0;
+        double pHaut = 0;
+        double pDroite = 0;
+        double pBas = 0;
 
         for (Entry entry : data) {
-            if (!entry.isResult()) {
-                pNon++;
-            } else {
-                pOui++;
+            switch(entry.getDirection()){
+                case 0: pGauche++;
+                    break;
+                case 1: pHaut++;
+                    break;
+                case 2: pDroite++;
+                    break;
+                case 3: pBas++;
+                    break;
             }
         }
 
-        if (pOui > pNon) {
-            return "Oui";
+        if((pGauche >= pDroite) && (pGauche >= pHaut) && (pGauche >= pBas)){
+            return "Gauche";
         }
-        return "Non";
+        if((pDroite >= pGauche) && (pDroite >= pHaut) && (pDroite >= pBas)){
+            return "Gauche";
+        }
+        if((pHaut >= pDroite) && (pHaut >= pGauche) && (pHaut >= pBas)){
+            return "Gauche";
+        }
+        if((pBas >= pDroite) && (pBas >= pGauche) && (pBas >= pGauche)){
+            return "Gauche";
+        }
+        return "c'est de la merdeeeee";
     }
 
     public void regenerateTree() {
@@ -451,7 +471,7 @@ public class Node {
             ioe.printStackTrace();
         }
     }
-    
+
     public void writeValueToFile() {
         try {
             FileOutputStream fos = new FileOutputStream("value.ser");
@@ -480,7 +500,7 @@ public class Node {
             return;
         }
     }
-    
+
     public void readFileValue() {
         try {
             FileInputStream fis = new FileInputStream("value.ser");

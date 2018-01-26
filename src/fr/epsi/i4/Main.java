@@ -19,10 +19,9 @@ public class Main {
 //        } catch (UnsupportedEncodingException ex) {
 //            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-
-tree.readFile();
-tree.readFileAttribut();
-tree.readFileValue();
+        tree.readFile();
+        tree.readFileAttribut();
+        tree.readFileValue();
 //        generateRandomData(tree, 1000000);
         tree.generateTree();
         tree.print();
@@ -31,72 +30,70 @@ tree.readFileValue();
 
         System.out.println("Programme exÃ©cutÃ© en " + time / 1000f + " secondes");
 
-        		tree.decide();
+        tree.decide();
 //        tree.addAttribut("Lune", "Pleine");
 //        Entry test = new Entry(1, 3, 6, 8, 1);
 //        test.getParams().add(tree.getIndexOfValue("Pleine"));
 //        tree.decide(test, tree);
-        
+
 //        tree.addValueToAttribut("Vent", "Inexistant");
 //        Entry test = new Entry(1, 3, 6, tree.getIndexOfValue("Inexistant"), 1);
 //        tree.decide(test, tree);
-        
 //        tree.decide(new Entry(1, 3, 6, 8, 1), tree);
         //		tree.print();
     }
 
-    public static void generateData(Node tree) {
-        tree.addAttribut("Ciel", "Soleil");
-        tree.addValueToAttribut("Ciel", "Couvert");
-        tree.addValueToAttribut("Ciel", "Pluie");
-
-        tree.addAttribut("Temp", "Basse");
-        tree.addValueToAttribut("Temp", "Haute");
-        tree.addValueToAttribut("Temp", "Pole Nord");
-
-        tree.addAttribut("HumiditÃ©", "Normale");
-        tree.addValueToAttribut("HumiditÃ©", "Eleve");
-
-        tree.addAttribut("Vent", "Faible");
-        tree.addValueToAttribut("Vent", "Fort");
-
-        tree.addEntry(new Entry(0, 3, 6, 8, 0));
-        tree.addEntry(new Entry(0, 3, 6, 9, 0));
-        tree.addEntry(new Entry(1, 3, 6, 8, 1));
-        tree.addEntry(new Entry(2, 4, 6, 8, 1));
-        tree.addEntry(new Entry(2, 5, 7, 8, 1));
-        tree.addEntry(new Entry(2, 5, 7, 9, 0));
-        tree.addEntry(new Entry(1, 5, 7, 9, 1));
-        tree.addEntry(new Entry(0, 4, 6, 8, 0));
-        tree.addEntry(new Entry(0, 5, 7, 8, 1));
-        tree.addEntry(new Entry(2, 4, 7, 8, 1));
-        tree.addEntry(new Entry(0, 4, 7, 9, 1));
-        tree.addEntry(new Entry(1, 4, 6, 9, 1));
-        tree.addEntry(new Entry(1, 3, 7, 8, 1));
-        tree.addEntry(new Entry(2, 4, 6, 9, 0));
-    }
-
-    public static void generateRandomData(Node tree, int quantity) {
-        tree.addAttribut("Ciel", "Soleil");
-        tree.addValueToAttribut("Ciel", "Couvert");
-        tree.addValueToAttribut("Ciel", "Pluie");
-
-        tree.addAttribut("Temp", "Basse");
-        tree.addValueToAttribut("Temp", "Haute");
-        tree.addValueToAttribut("Temp", "Pole Nord");
-
-        tree.addAttribut("HumiditÃ©", "Normale");
-        tree.addValueToAttribut("HumiditÃ©", "Eleve");
-
-        tree.addAttribut("Vent", "Faible");
-        tree.addValueToAttribut("Vent", "Fort");
-        for (int i = 0; i < quantity; i++) {
-            Entry entry
-                    = new Entry(randomInt(0, 2), randomInt(3, 5), randomInt(6, 7), randomInt(7, 8), randomInt(0, 1));
-            tree.addEntry(entry);
-        }
-    }
-
+//    public static void generateData(Node tree) {
+//        tree.addAttribut("Ciel", "Soleil");
+//        tree.addValueToAttribut("Ciel", "Couvert");
+//        tree.addValueToAttribut("Ciel", "Pluie");
+//
+//        tree.addAttribut("Temp", "Basse");
+//        tree.addValueToAttribut("Temp", "Haute");
+//        tree.addValueToAttribut("Temp", "Pole Nord");
+//
+//        tree.addAttribut("HumiditÃ©", "Normale");
+//        tree.addValueToAttribut("HumiditÃ©", "Eleve");
+//
+//        tree.addAttribut("Vent", "Faible");
+//        tree.addValueToAttribut("Vent", "Fort");
+//
+//        tree.addEntry(new Entry(0, 3, 6, 8, 0));
+//        tree.addEntry(new Entry(0, 3, 6, 9, 0));
+//        tree.addEntry(new Entry(1, 3, 6, 8, 1));
+//        tree.addEntry(new Entry(2, 4, 6, 8, 1));
+//        tree.addEntry(new Entry(2, 5, 7, 8, 1));
+//        tree.addEntry(new Entry(2, 5, 7, 9, 0));
+//        tree.addEntry(new Entry(1, 5, 7, 9, 1));
+//        tree.addEntry(new Entry(0, 4, 6, 8, 0));
+//        tree.addEntry(new Entry(0, 5, 7, 8, 1));
+//        tree.addEntry(new Entry(2, 4, 7, 8, 1));
+//        tree.addEntry(new Entry(0, 4, 7, 9, 1));
+//        tree.addEntry(new Entry(1, 4, 6, 9, 1));
+//        tree.addEntry(new Entry(1, 3, 7, 8, 1));
+//        tree.addEntry(new Entry(2, 4, 6, 9, 0));
+//    }
+//
+//    public static void generateRandomData(Node tree, int quantity) {
+//        tree.addAttribut("Ciel", "Soleil");
+//        tree.addValueToAttribut("Ciel", "Couvert");
+//        tree.addValueToAttribut("Ciel", "Pluie");
+//
+//        tree.addAttribut("Temp", "Basse");
+//        tree.addValueToAttribut("Temp", "Haute");
+//        tree.addValueToAttribut("Temp", "Pole Nord");
+//
+//        tree.addAttribut("HumiditÃ©", "Normale");
+//        tree.addValueToAttribut("HumiditÃ©", "Eleve");
+//
+//        tree.addAttribut("Vent", "Faible");
+//        tree.addValueToAttribut("Vent", "Fort");
+//        for (int i = 0; i < quantity; i++) {
+//            Entry entry
+//                    = new Entry(randomInt(0, 2), randomInt(3, 5), randomInt(6, 7), randomInt(7, 8), randomInt(0, 1));
+//            tree.addEntry(entry);
+//        }
+//    }
     public static int randomInt(int min, int max) {
         return min + (int) (Math.random() * ((max - min) + 1));
     }

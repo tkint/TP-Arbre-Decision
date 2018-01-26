@@ -24,13 +24,15 @@ public class Entry {
     
     private boolean result;
     
+    private int direction;
+    
     private List<Integer> params;
 
     public Entry() {
         params = new ArrayList<>();
     }
     
-    public Entry(Integer ciel, Integer temperature, Integer humidite, Integer vent, Integer jouer) {
+    public Entry(Integer ciel, Integer temperature, Integer humidite, Integer vent, Integer jouer, int direction) {
         this.ciel = ciel;
         this.temperature = temperature;
         this.humidite = humidite;
@@ -41,6 +43,7 @@ public class Entry {
         } else {
             result = true;
         }
+        this.direction = direction;
         params = new ArrayList<>();
         params.add(ciel);
         params.add(temperature);
@@ -98,7 +101,7 @@ public class Entry {
     }
 
     public Entry clone(Integer jouer) {
-        return new Entry(ciel, temperature, humidite, vent, jouer);
+        return new Entry(ciel, temperature, humidite, vent, jouer, direction);
     }
 
     public boolean isResult() {
@@ -123,14 +126,15 @@ public class Entry {
     
     public void StringToObject(String readLine){
         String[] atts = readLine.split(",");
-        for (int i = 0; i < atts.length - 1; i++){
+        for (int i = 0; i < atts.length - 2; i++){
             params.add(Integer.valueOf(atts[i]));
         }
-        if (atts[atts.length - 1].equals("false")){
+        if (atts[atts.length - 2].equals("false")){
             result = false;
         } else {
             result = true;
         }
+        direction = Integer.valueOf(atts[atts.length - 1]);
     }
 
     @Override
@@ -140,8 +144,15 @@ public class Entry {
             s +=  i + ",";
         }
         s += result;
+        s += ", " +  direction;
         return s;
     }
-    
-    
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
 }
