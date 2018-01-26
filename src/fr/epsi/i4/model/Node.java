@@ -251,16 +251,16 @@ public class Node {
         }
 
         if (pG >= pH && pG >= pD && pG >= pB) {
-            return "Gauche";
+            return "Aller à Gauche";
         }
         if (pH >= pG && pH >= pD && pH >= pB) {
-            return "Haut";
+            return "Aller à Haut";
         }
         if (pD >= pH && pD >= pG && pD >= pB) {
-            return "Droite";
+            return "Aller à Droite";
         }
         if (pB >= pH && pB >= pD && pB >= pG) {
-            return "Bas";
+            return "Aller à Bas";
         }
         return "Merde !!!";
     }
