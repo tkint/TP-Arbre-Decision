@@ -33,8 +33,4 @@ public class Branch {
         this.child = child;
         return child;
     }
-
-    public void display() {
-        System.out.print(value + " | ");
-    }
 }
