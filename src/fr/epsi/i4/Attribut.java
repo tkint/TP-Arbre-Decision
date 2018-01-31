@@ -30,4 +30,16 @@ public class Attribut {
 	public boolean isPossibleValue(int value) {
 		return value >= values.length;
 	}
+
+	public Integer getValueByName(String valueName) {
+		Integer value = null;
+		int i = 0;
+		while (i < values.length && value == null) {
+			if (values[i].equals(valueName)) {
+				value = i;
+			}
+			i++;
+		}
+		return value;
+	}
 }

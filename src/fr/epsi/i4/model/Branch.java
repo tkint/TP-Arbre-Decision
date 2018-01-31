@@ -5,32 +5,33 @@ package fr.epsi.i4.model;
  */
 public class Branch {
 
-    private String value;
-    private Node child;
+	private Integer valueIndex;
 
-    public Branch(String value) {
-        this.value = value;
-    }
+	private Node node;
 
-    public Branch(String value, Node child) {
-        this.value = value;
-        this.child = child;
-    }
+	public Branch(Integer valueIndex) {
+		this.valueIndex = valueIndex;
+	}
 
-    public String getValue() {
-        return value;
-    }
+	public Branch(Integer valueIndex, Node node) {
+		this.valueIndex = valueIndex;
+		this.node = node;
+	}
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+	public Integer getValueIndex() {
+		return valueIndex;
+	}
 
-    public Node getChild() {
-        return child;
-    }
+	public void setValueIndex(Integer valueIndex) {
+		this.valueIndex = valueIndex;
+	}
 
-    public Node setChild(Node child) {
-        this.child = child;
-        return child;
-    }
+	public Node getNode() {
+		return node;
+	}
+
+	public Node setChild(Node child) {
+		this.node = child;
+		return child;
+	}
 }

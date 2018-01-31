@@ -10,23 +10,23 @@ public class Entry {
 
 	private int result;
 
-	private List<Integer> params;
+	private List<Integer> values;
 
 	public Entry() {
-		params = new ArrayList<>();
+		values = new ArrayList<>();
 	}
 
-	public Entry(Integer... params) {
-		this.params = new ArrayList<>();
-		for (int i = 0; i < params.length - 1; i++) {
-			this.params.add(params[i]);
+	public Entry(Integer... values) {
+		this.values = new ArrayList<>();
+		for (int i = 0; i < values.length - 1; i++) {
+			this.values.add(values[i]);
 		}
-		result = params[params.length - 1];
+		result = values[values.length - 1];
 	}
 
-	public Entry(int result, List<Integer> params) {
+	public Entry(int result, List<Integer> values) {
 		this.result = result;
-		this.params = params;
+		this.values = values;
 	}
 
 	public static Entry fromText(String line) {
@@ -46,22 +46,22 @@ public class Entry {
 		this.result = result;
 	}
 
-	public List<Integer> getParams() {
-		return params;
+	public List<Integer> getValues() {
+		return values;
 	}
 
-	public void setParams(List<Integer> params) {
-		this.params = params;
+	public void setValues(List<Integer> values) {
+		this.values = values;
 	}
 
 	public void addParam(Integer param) {
-		params.add(param);
+		values.add(param);
 	}
 
 	public String toText() {
 		StringBuilder str = new StringBuilder();
-		for (int i = 0; i < params.size(); i++) {
-			str.append(params).append(",");
+		for (int i = 0; i < values.size(); i++) {
+			str.append(values.get(i)).append(",");
 		}
 		str.append(result);
 		return str.toString();

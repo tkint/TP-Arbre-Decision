@@ -23,17 +23,13 @@ public class DecisionTree {
 	public static void init(Config config) {
 		DecisionTree.config = config;
 		initDirectory();
-		initAttributs();
 		initData();
 	}
 
-	private static void initAttributs() {
-
-	}
-
 	private static void initData() {
-		tree = new Node();
+		tree = new Node(config);
 		readDataFromFile();
+		tree.generateTree();
 	}
 
 	private static void initDirectory() {
@@ -45,8 +41,12 @@ public class DecisionTree {
 		}
 	}
 
-	public static void addValueToData(String attributName, String value) {
+	public static void print() {
+		tree.print();
+	}
 
+	public static void regenerateTree() {
+		tree.regenerateTree();
 	}
 
 	public static void save() {
@@ -63,7 +63,7 @@ public class DecisionTree {
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(f));
 			String line;
 			while ((line = bufferedReader.readLine()) != null) {
-				tree.getData().add(Entry.fromText(line));
+				tree.getEntries().add(Entry.fromText(line));
 			}
 		} catch (IOException e) {
 			System.out.println("Aucune données");
@@ -74,7 +74,7 @@ public class DecisionTree {
 		PrintWriter writer = null;
 		try {
 			writer = new PrintWriter(getFilePath(dataFileName), "UTF-8");
-			for (Entry entry : tree.getData()) {
+			for (Entry entry : tree.getEntries()) {
 				writer.println(entry.toText());
 			}
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
@@ -86,7 +86,28 @@ public class DecisionTree {
 		}
 	}
 
-	public static String decide(Entry entry) {
-		return tree.decide(entry);
+	public static String decide(String... params) {
+		Entry entry = entryFromParams(params);
+		int decision = tree.decide(entry);
+		return config.getResultats().get(decision);
+	}
+
+	public static void addData(String... params) {
+		if (params.length == config.getAttributs().size() + 1) {
+			Entry entry = entryFromParams(params);
+			tree.addEntry(entry);
+		}
+	}
+
+	private static Entry entryFromParams(String... params) {
+		Integer[] values = new Integer[params.length];
+		for (int i = 0; i < params.length; i++) {
+			if (params.length > config.getAttributs().size() && i == params.length - 1) {
+				values[i] = config.getResultatByName(params[i]);
+			} else {
+				values[i] = config.getIndexOfValue(i, params[i]);
+			}
+		}
+		return new Entry(values);
 	}
 }

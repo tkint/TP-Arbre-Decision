@@ -6,177 +6,120 @@ import static fr.epsi.i4.utils.ConsoleColors.RED;
 import static fr.epsi.i4.utils.ConsoleColors.RESET;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+
+import fr.epsi.i4.Config;
 
 /**
  * Created by tkint on 23/11/2017.
  */
 public class Node {
 
-	private String value;
+	private int attributIndex;
 
-	private List<Branch> children;
+	private List<Branch> branches;
 
-	private List<Entry> data;
+	private List<Entry> entries;
 
-	private static LinkedHashMap<String, List<Integer>> attributs = new LinkedHashMap<>();
+	private Config config;
 
-	private static List<String> values = new ArrayList<>();
-
-	private static Integer id = 0;
-
-	public Node() {
-		this.children = new ArrayList<>();
-		this.data = new ArrayList<>();
+	public Node(Config config) {
+		this.config = config;
+		this.branches = new ArrayList<>();
+		this.entries = new ArrayList<>();
 	}
 
-	public Node(Integer valueToKeep, Integer att, List<Entry> data) {
-		this();
-		for (Entry entry : data) {
-			if (entry.getParams().size() > att && entry.getParams().get(att).equals(valueToKeep)) {
+	public Node(Config config, Integer valueToKeep, Integer att, List<Entry> entries) {
+		this(config);
+		for (Entry entry : entries) {
+			if (entry.getValues().size() > att && entry.getValues().get(att).equals(valueToKeep)) {
 				addEntry(entry);
 			}
 		}
 	}
 
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public List<Branch> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<Branch> children) {
-        this.children = children;
-    }
-
-	public List<Entry> getData() {
-		return data;
+	public int getAttributIndex() {
+		return attributIndex;
 	}
 
-	public void setData(List<Entry> data) {
-		this.data = data;
+	public void setAttributIndex(int attributIndex) {
+		this.attributIndex = attributIndex;
 	}
 
-	public static LinkedHashMap<String, List<Integer>> getAttributs() {
-		return attributs;
+	public List<Branch> getBranches() {
+		return branches;
 	}
 
-	public static void setAttributs(LinkedHashMap<String, List<Integer>> attributs) {
-		Node.attributs = attributs;
+	public void setBranches(List<Branch> branches) {
+		this.branches = branches;
 	}
 
-	public static List<String> getValues() {
-		return values;
+	public List<Entry> getEntries() {
+		return entries;
 	}
 
-	public static void setValues(List<String> values) {
-		Node.values = values;
+	public void setEntries(List<Entry> entries) {
+		this.entries = entries;
 	}
 
-	public static Integer getId() {
-		return id;
-	}
-
-	public static void setId(Integer id) {
-		Node.id = id;
-	}
-
-    public Branch addChild(Branch branch) {
-		children.add(branch);
+	public Branch addBranch(Branch branch) {
+		branches.add(branch);
 		return branch;
 	}
 
 	public Entry addEntry(Entry entry) {
-		try {
-			data.add(entry);
-		} catch (OutOfMemoryError e) {
-			System.out.println(data.size());
-			throw e;
-		}
+		entries.add(entry);
 		return entry;
 	}
 
-	public double entropie(int value, Integer att) {
-		double pG = 0;
-		double pH = 0;
-		double pD = 0;
-		double pB = 0;
+	public double entropie(int attributIndex, int valueIndex) {
+		double[] p = new double[config.getResultats().size()];
+		for (int i = 0; i < p.length; i++) {
+			p[i] = 0;
+		}
 
-		for (Entry entry : data) {
-			if (entry.getParams().size() < att + 1) {
+		for (Entry entry : entries) {
+			if (attributIndex + 1 > entry.getValues().size()) {
 				return 0d;
-			} else if (entry.getParams().get(att) == value) {
-				switch (entry.getResult()) {
-					case 0:
-						pG++;
-						break;
-					case 1:
-						pH++;
-						break;
-					case 2:
-						pD++;
-						break;
-					case 3:
-						pB++;
-						break;
-				}
+			} else if (entry.getValues().get(attributIndex) == valueIndex) {
+				p[entry.getResult()]++;
 			}
 		}
 
-		// if (pOui == 0 || pNon == 0) {
-		// return 0d;
-		// }
-		pG /= data.size();
-		pH /= data.size();
-		pD /= data.size();
-		pB /= data.size();
+		for (int i = 0; i < p.length; i++) {
+			p[i] /= entries.size();
+		}
 
-		// return -pOui * log2(pOui) - pNon * log2(pNon);
-		return -pG * log2(pG) - pH * log2(pH) - pD * log2(pD) - pB * log2(pB);
+		double entropie = 0;
+
+		for (int i = 0; i < p.length; i++) {
+			entropie = entropie - (p[i] * log2(p[i]));
+		}
+
+		return entropie;
 	}
 
 	public double entropie() {
-		double pG = 0;
-		double pH = 0;
-		double pD = 0;
-		double pB = 0;
-
-		for (Entry entry : data) {
-			switch (entry.getResult()) {
-				case 0:
-					pG++;
-					break;
-				case 1:
-					pH++;
-					break;
-				case 2:
-					pD++;
-					break;
-				case 3:
-					pB++;
-					break;
-			}
+		double[] p = new double[config.getResultats().size()];
+		for (int i = 0; i < p.length; i++) {
+			p[i] = 0;
 		}
-		// if (pOui == 0 || pNon == 0) {
-		// return 0d;
-		// }
 
-		pG /= data.size();
-		pH /= data.size();
-		pD /= data.size();
-		pB /= data.size();
+		for (Entry entry : entries) {
+			p[entry.getResult()]++;
+		}
 
-		// return -pOui * log2(pOui) - pNon * log2(pNon);
-		return -pG * log2(pG) - pH * log2(pH) - pD * log2(pD) - pB * log2(pB);
+		for (int i = 0; i < p.length; i++) {
+			p[i] /= entries.size();
+		}
+
+		double entropie = 0;
+
+		for (int i = 0; i < p.length; i++) {
+			entropie = entropie - (p[i] * log2(p[i]));
+		}
+
+		return entropie;
 	}
 
 	private double log2(double x) {
@@ -186,134 +129,131 @@ public class Node {
 		return Math.log(x) / Math.log(2.);
 	}
 
-	public Double pertinence(Integer att) {
-		Double total = entropie();
-		for (int v : getUniqueValues(att)) {
-			total -= partPertinence(v, att);
+	/**
+	 * Retourne la pertinence d'un attribut
+	 * 
+	 * @param attributIndex
+	 * @return
+	 */
+	public Double pertinence(int attributIndex) {
+		double pertinence = entropie();
+		for (int valueIndex = 0; valueIndex < config.getAttributByIndex(attributIndex)
+				.getValues().length; valueIndex++) {
+			pertinence -= partPertinence(attributIndex, valueIndex);
 		}
-		return total;
+		return pertinence;
 	}
 
-	private double partPertinence(int value, Integer att) {
-		return getRatio(value, att) * entropie(value, att);
+	/**
+	 * Retourne la pertinence d'une valeur d'un attribut
+	 * 
+	 * @param attributIndex
+	 * @param valueIndex
+	 * @return
+	 */
+	private double partPertinence(int attributIndex, int valueIndex) {
+		return getRatio(attributIndex, valueIndex) * entropie(attributIndex, valueIndex);
 	}
 
-	public double getRatio(int value, Integer att) {
-		double nb = 0d;
+	/**
+	 * Retourne le ratio d'une valeur d'un attribut sur les entries du noeud courant
+	 * 
+	 * @param attributIndex
+	 * @param valueIndex
+	 * @return
+	 */
+	public double getRatio(int attributIndex, int valueIndex) {
+		double count = 0d;
 
-		for (Entry entry : data) {
-			if (entry.getParams().size() < att + 1) {
+		// Pour chaque entry
+		for (Entry entry : entries) {
+			if (attributIndex + 1 > entry.getValues().size()) {
 				return 0d;
-			} else if (entry.getParams().get(att) == value) {
-				nb++;
+			} else if (entry.getValues().get(attributIndex) == valueIndex) {
+				count++;
 			}
 		}
 
-		if (data.size() == 0) {
+		if (entries.size() == 0) {
 			return 0d;
 		}
-		return nb / data.size();
-	}
 
-	public List<Integer> getUniqueValues(Integer att) {
-		Iterator<String> itr;
-		itr = attributs.keySet().iterator();
-		for (int i = 0; i < att; i++) {
-			itr.next();
-		}
-		List<Integer> uniqueValues = attributs.get(itr.next());
-
-		return uniqueValues;
+		return count / entries.size();
 	}
 
 	public Integer getPlusPertinent() {
 		Double pertinence = 0d;
-		Integer fieldPlusPertinent = -1;
-		for (int i = 0; i < attributs.size(); i++) {
+		Integer plusPertinent = -1;
+		for (int i = 0; i < config.getAttributs().size(); i++) {
 			Double p = pertinence(i);
 			if (p > pertinence) {
 				pertinence = p;
-				fieldPlusPertinent = i;
+				plusPertinent = i;
 			}
 		}
 
-		if (fieldPlusPertinent == -1) {
+		if (plusPertinent == -1) {
 			return null;
 		}
 
-		return fieldPlusPertinent;
+		return plusPertinent;
 	}
 
-	public String getOuiNon() {
-		double pG = 0;
-		double pH = 0;
-		double pD = 0;
-		double pB = 0;
+	public int getResultat() {
+		List<Integer> p = new ArrayList<>();
 
-		for (Entry entry : data) {
-			switch (entry.getResult()) {
-				case 0:
-					pG++;
-					break;
-				case 1:
-					pH++;
-					break;
-				case 2:
-					pD++;
-					break;
-				case 3:
-					pB++;
-					break;
+		for (int i = 0; i < config.getResultats().size(); i++) {
+			p.add(0);
+		}
+
+		for (Entry entry : entries) {
+			p.set(entry.getResult(), p.get(entry.getResult()) + 1);
+		}
+
+		int max = 0;
+		int maxIndex = 0;
+		for (int i = 0; i < p.size(); i++) {
+			if (p.get(i) > max) {
+				max = p.get(i);
+				maxIndex = i;
 			}
 		}
 
-		if (pG >= pH && pG >= pD && pG >= pB) {
-			return "Aller à Gauche";
-		}
-		if (pH >= pG && pH >= pD && pH >= pB) {
-			return "Aller à Haut";
-		}
-		if (pD >= pH && pD >= pG && pD >= pB) {
-			return "Aller à Droite";
-		}
-		if (pB >= pH && pB >= pD && pB >= pG) {
-			return "Aller à Bas";
-		}
-		return "Merde !!!";
+		return maxIndex;
 	}
 
 	public void regenerateTree() {
-		setChildren(new ArrayList<>());
+		setBranches(new ArrayList<>());
 		generateTree();
 	}
 
 	public void generateTree() {
 		Integer plusPertinent = getPlusPertinent();
 		if (plusPertinent != null) {
-			int index = 0;
-			String key = "";
-			for (Map.Entry<String, List<Integer>> entry : attributs.entrySet()) {
-				if (index == plusPertinent) {
-					key = entry.getKey();
-				}
-				index++;
-			}
-
-			setValue(key);
-			for (Integer value : getUniqueValues(plusPertinent)) {
-				Branch branch = addChild(new Branch(String.valueOf(value)));
-				Node child = branch.setChild(new Node(value, plusPertinent, data));
+			setAttributIndex(plusPertinent);
+			for (int valueIndex = 0; valueIndex < config.getAttributByIndex(plusPertinent)
+					.getValues().length; valueIndex++) {
+				Branch branch = addBranch(new Branch(valueIndex));
+				Node child = branch.setChild(new Node(config, valueIndex, plusPertinent, entries));
 				child.generateTree();
 			}
 		} else {
-			setValue(getOuiNon());
+			setAttributIndex(getResultat());
 		}
 	}
 
-	public String getStringValue(Integer value) {
-		String stringValue = values.get(value);
-
-		return stringValue;
+	public int decide(Entry entry) {
+		if (getBranches().size() == 0) {
+			return attributIndex;
+		} else {
+			for (Branch branch : getBranches()) {
+				if (entry.getValues().get(attributIndex).equals(branch.getValueIndex())) {
+					// if (entry.getValues().contains(branch.getValueIndex())) {
+					return branch.getNode().decide(entry);
+				}
+			}
+		}
+		return -1;
 	}
 
 	public void print() {
@@ -321,47 +261,25 @@ public class Node {
 	}
 
 	private void print(String prefix, boolean isTail, String branchValue) {
-		boolean ouiNon = value.toLowerCase().equals("oui") || value.toLowerCase().equals("non");
+		boolean result = branches.isEmpty();
 		String txt = prefix;
-		txt += branchValue != "" ? isTail ? "└── " : "├── " : " ── ";
-		txt += branchValue != "" ? BLUE + branchValue + RESET + " => " : BLUE;
-		txt += ouiNon ? GREEN : RED;
-		txt += value.toUpperCase() + RESET;
+		txt += !branchValue.equals("") ? isTail ? "└── " : "├── " : " ── ";
+		txt += !branchValue.equals("") ? BLUE + branchValue + RESET + " => " : BLUE;
+		txt += result ? GREEN + config.getResultats().get(attributIndex) : RED + config.getAttributByIndex(
+				attributIndex).getName();
+		txt += " (" + attributIndex + ") " + RESET;
 		System.out.println(txt);
 		txt = prefix;
 		txt += isTail ? "     " : "│    ";
-		for (int i = 0; i < children.size() - 1; i++) {
-			branchValue = getStringValue(Integer.valueOf(children.get(i).getValue()));
-			// branchValue += " (" + children.get(i).getValue() + ")";
-			children.get(i).getChild().print(txt, false, branchValue.toUpperCase());
+		for (int i = 0; i < branches.size() - 1; i++) {
+			branchValue = config.getValue(attributIndex, branches.get(i).getValueIndex());
+			branchValue += " (" + branches.get(i).getValueIndex() + ")";
+			branches.get(i).getNode().print(txt, false, branchValue);
 		}
-		if (children.size() > 0) {
-			branchValue = getStringValue(Integer.valueOf(children.get(children.size() - 1).getValue()));
-			branchValue += " (" + children.get(children.size() - 1).getValue() + ")";
-			children.get(children.size() - 1).getChild().print(txt, true, branchValue.toUpperCase());
+		if (branches.size() > 0) {
+			branchValue = config.getValue(attributIndex, branches.get(branches.size() - 1).getValueIndex());
+			branchValue += " (" + branches.get(branches.size() - 1).getValueIndex() + ")";
+			branches.get(branches.size() - 1).getNode().print(txt, true, branchValue);
 		}
-	}
-
-	public String decide(Entry entry) {
-		if (getChildren().size() == 0) {
-			return value;
-		} else {
-			for (Branch child : getChildren()) {
-				if (entry.getParams().contains(Integer.valueOf(child.getValue()))) {
-					return child.getChild().decide(entry);
-				}
-			}
-		}
-		return null;
-	}
-
-	public Integer getIndexOfAttribut(String att) {
-		List<String> keys = new ArrayList<String>(attributs.keySet());
-		for (String s : keys) {
-			if (att.equals(s)) {
-				return keys.indexOf(s);
-			}
-		}
-		return null;
 	}
 }
