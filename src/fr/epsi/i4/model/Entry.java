@@ -8,24 +8,20 @@ import java.util.List;
  */
 public class Entry {
 
-	private Integer result;
-
 	private List<Integer> values;
 
-	public Entry() {
-		values = new ArrayList<>();
-	}
+	private Integer decision;
 
 	public Entry(Integer... values) {
 		this.values = new ArrayList<>();
 		for (int i = 0; i < values.length - 1; i++) {
 			this.values.add(values[i]);
 		}
-		result = values[values.length - 1];
+		decision = values[values.length - 1];
 	}
 
-	public Entry(int result, List<Integer> values) {
-		this.result = result;
+	public Entry(int decision, List<Integer> values) {
+		this.decision = decision;
 		this.values = values;
 	}
 
@@ -38,12 +34,12 @@ public class Entry {
 		return new Entry(intAtts.toArray(new Integer[stringAtts.length]));
 	}
 
-	public int getResult() {
-		return result;
+	public Integer getDecision() {
+		return decision;
 	}
 
-	public void setResult(int result) {
-		this.result = result;
+	public void setDecision(Integer decision) {
+		this.decision = decision;
 	}
 
 	public List<Integer> getValues() {
@@ -54,16 +50,12 @@ public class Entry {
 		this.values = values;
 	}
 
-	public void addParam(Integer param) {
-		values.add(param);
-	}
-
 	public String toText() {
 		StringBuilder str = new StringBuilder();
 		for (int i = 0; i < values.size(); i++) {
 			str.append(values.get(i)).append(",");
 		}
-		str.append(result);
+		str.append(decision);
 		return str.toString();
 	}
 }

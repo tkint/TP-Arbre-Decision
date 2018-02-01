@@ -9,16 +9,16 @@ public class Config {
 
 	private List<Attribut> attributs;
 
-	private List<String> resultats;
+	private List<String> decisions;
 
 	public Config(String directory) {
 		this.directory = directory;
 		this.attributs = new ArrayList<>();
-		this.resultats = new ArrayList<>();
+		this.decisions = new ArrayList<>();
 	}
 
-	public List<String> getResultats() {
-		return resultats;
+	public List<String> getDecisions() {
+		return decisions;
 	}
 
 	public List<Attribut> getAttributs() {
@@ -29,8 +29,8 @@ public class Config {
 		return attributs.get(attributIndex);
 	}
 
-	public void addResultat(String resultat) {
-		this.resultats.add(resultat);
+	public void addDecision(String decision) {
+		this.decisions.add(decision);
 	}
 
 	public void addAttribut(String attributName, String... values) {
@@ -49,27 +49,15 @@ public class Config {
 		return attributs.get(attributIndex).getValues()[valueIndex];
 	}
 
-	public Integer getResultatByName(String resultatName) {
-		Integer resultat = null;
+	public Integer getDecisionByName(String decisionName) {
+		Integer decision = null;
 		int i = 0;
-		while (i < resultats.size() && resultat == null) {
-			if (resultats.get(i).equals(resultatName)) {
-				resultat = i;
+		while (i < decisions.size() && decision == null) {
+			if (decisions.get(i).equals(decisionName)) {
+				decision = i;
 			}
 			i++;
 		}
-		return resultat;
-	}
-
-	public Attribut getAttributByName(String attributName) {
-		Attribut attribut = null;
-		int i = 0;
-		while (i < attributs.size() && attribut == null) {
-			if (attributs.get(i).getName().equals(attributName)) {
-				attribut = attributs.get(i);
-			}
-			i++;
-		}
-		return attribut;
+		return decision;
 	}
 }

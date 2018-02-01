@@ -73,7 +73,7 @@ public class Node {
 	}
 
 	public double entropie(int attributIndex, int valueIndex) {
-		double[] p = new double[config.getResultats().size()];
+		double[] p = new double[config.getDecisions().size()];
 		for (int i = 0; i < p.length; i++) {
 			p[i] = 0;
 		}
@@ -82,7 +82,7 @@ public class Node {
 			if (attributIndex + 1 > entry.getValues().size()) {
 				return 0d;
 			} else if (entry.getValues().get(attributIndex) == valueIndex) {
-				p[entry.getResult()]++;
+				p[entry.getDecision()]++;
 			}
 		}
 
@@ -100,13 +100,13 @@ public class Node {
 	}
 
 	public double entropie() {
-		double[] p = new double[config.getResultats().size()];
+		double[] p = new double[config.getDecisions().size()];
 		for (int i = 0; i < p.length; i++) {
 			p[i] = 0;
 		}
 
 		for (Entry entry : entries) {
-			p[entry.getResult()]++;
+			p[entry.getDecision()]++;
 		}
 
 		for (int i = 0; i < p.length; i++) {
@@ -199,15 +199,15 @@ public class Node {
 		return plusPertinent;
 	}
 
-	public int getResultat() {
+	public int getDecision() {
 		List<Integer> p = new ArrayList<>();
 
-		for (int i = 0; i < config.getResultats().size(); i++) {
+		for (int i = 0; i < config.getDecisions().size(); i++) {
 			p.add(0);
 		}
 
 		for (Entry entry : entries) {
-			p.set(entry.getResult(), p.get(entry.getResult()) + 1);
+			p.set(entry.getDecision(), p.get(entry.getDecision()) + 1);
 		}
 
 		int max = 0;
@@ -244,7 +244,7 @@ public class Node {
 				child.generateTree();
 			}
 		} else {
-			setAttributIndex(getResultat());
+			setAttributIndex(getDecision());
 		}
 	}
 
@@ -266,11 +266,11 @@ public class Node {
 	}
 
 	private void print(String prefix, boolean isTail, String branchValue) {
-		boolean result = branches.isEmpty();
+		boolean isFinal = branches.isEmpty();
 		String txt = prefix;
 		txt += !branchValue.equals("") ? isTail ? "└── " : "├── " : " ── ";
 		txt += !branchValue.equals("") ? BLUE + branchValue + RESET + " => " : BLUE;
-		txt += result ? GREEN + config.getResultats().get(attributIndex) : RED + config.getAttributByIndex(
+		txt += isFinal ? GREEN + config.getDecisions().get(attributIndex) : RED + config.getAttributByIndex(
 				attributIndex).getName();
 		txt += " (" + attributIndex + ") " + RESET;
 		System.out.println(txt);

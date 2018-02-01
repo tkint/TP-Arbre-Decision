@@ -89,7 +89,7 @@ public class DecisionTree {
 	public static String decide(String... params) {
 		Entry entry = entryFromParams(params);
 		int decision = tree.decide(entry);
-		return config.getResultats().get(decision);
+		return config.getDecisions().get(decision);
 	}
 
 	public static void addData(String... params) {
@@ -108,7 +108,7 @@ public class DecisionTree {
 		}
 		for (int i = 0; i < params.length; i++) {
 			if (params.length > config.getAttributs().size() && i == params.length - 1) {
-				values[i] = config.getResultatByName(params[i]);
+				values[i] = config.getDecisionByName(params[i]);
 			} else {
 				values[i] = config.getIndexOfValue(i, params[i]);
 			}
