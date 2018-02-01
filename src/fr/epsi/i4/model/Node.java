@@ -222,11 +222,17 @@ public class Node {
 		return maxIndex;
 	}
 
+	/**
+	 * Regenerate tree
+	 */
 	public void regenerateTree() {
 		setBranches(new ArrayList<>());
 		generateTree();
 	}
 
+	/**
+	 * Generate tree
+	 */
 	public void generateTree() {
 		Integer plusPertinent = getPlusPertinent();
 		if (plusPertinent != null) {
@@ -248,7 +254,6 @@ public class Node {
 		} else {
 			for (Branch branch : getBranches()) {
 				if (entry.getValues().get(attributIndex).equals(branch.getValueIndex())) {
-					// if (entry.getValues().contains(branch.getValueIndex())) {
 					return branch.getNode().decide(entry);
 				}
 			}

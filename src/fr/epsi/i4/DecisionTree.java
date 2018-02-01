@@ -100,7 +100,12 @@ public class DecisionTree {
 	}
 
 	private static Entry entryFromParams(String... params) {
-		Integer[] values = new Integer[params.length];
+		Integer[] values;
+		if (params.length == config.getAttributs().size()) {
+			values = new Integer[params.length + 1];
+		} else {
+			values = new Integer[params.length];
+		}
 		for (int i = 0; i < params.length; i++) {
 			if (params.length > config.getAttributs().size() && i == params.length - 1) {
 				values[i] = config.getResultatByName(params[i]);

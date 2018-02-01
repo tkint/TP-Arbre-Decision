@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class Entry {
 
-	private int result;
+	private Integer result;
 
 	private List<Integer> values;
 
